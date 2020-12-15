@@ -1,0 +1,49 @@
+<div class="body">
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="col-lg-4 my-auto">
+                <mat-card>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <h4>Sign In</h4>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12">
+                              
+                                    <mat-form-field class="example-full-width w-100">
+                                      <input matInput placeholder="Email">
+                                    </mat-form-field>
+
+                                    <mat-form-field class="example-full-width w-100">
+                                        <mat-label>Enter your password</mat-label>
+                                        <input matInput [type]="hide ? 'password' : 'text'">
+                                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                                        </button>
+                                      </mat-form-field>
+
+ 
+                               
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm-12 d-flex">
+                                <button  mat-raised-button color="primary" class="btnMarginLeft">Login</button>
+                            </div>
+                            </div>
+                            <div class="row mt-5">
+                                <div class="col-sm-12 d-flex justify-content-center">
+                                    <span>Dont have an account?<i class="fas fa-user-plus fa-2x" (click)="navigateTo()"></i></span>
+                                </div>
+                            </div>
+                    </div>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+  
+
+
+</div>

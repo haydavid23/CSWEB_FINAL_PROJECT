@@ -1,0 +1,35 @@
+.body
+{
+    height: 100%;
+}
+
+.container
+{
+    height: 100%;
+}
+
+i
+{
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.row
+{
+    height: 100%;
+}
+
+.btnMarginLeft
+{
+    margin-left: auto;
+}
+
+mat-card
+{
+    background-color: #FFD294
+}
+
+button
+{
+    background-color: #D4827B !important;
+}
