@@ -2,6 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule} from '@angular/material';
+import { HttpClientModule } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -12,7 +14,10 @@ import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule} fro
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    FormsModule
     
   ],
   exports:[
@@ -20,7 +25,10 @@ import { MatButtonModule, MatFormFieldModule, MatIconModule, MatInputModule} fro
     MatInputModule,
     MatFormFieldModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    HttpClientModule,
+    ReactiveFormsModule,
+    FormsModule
   ]
 })
 export class SharedModuleModule { }

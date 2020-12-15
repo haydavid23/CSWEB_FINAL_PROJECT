@@ -11,30 +11,32 @@
                         </div>
                         <div class="row">
                             <div class="col-sm-12">
-                              
+                              <form [formGroup]="parentForm" (ngSubmit)="registerUser(parentForm)">
                                     <mat-form-field class="example-full-width w-100">
-                                      <input matInput placeholder="First Name">
+                                      <input matInput placeholder="First Name" formControlName="firstName" >
                                     </mat-form-field>
                                
                                     <mat-form-field class="example-full-width w-100">
-                                      <input matInput  placeholder="Last Name">
+                                      <input matInput  placeholder="Last Name" formControlName="lastName">
                                     </mat-form-field>
 
                                     <mat-form-field class="example-full-width w-100">
-                                        <input matInput  placeholder="Email">
+                                        <input matInput  placeholder="Email" formControlName="email">
                                     </mat-form-field>
 
                                     <mat-form-field class="example-full-width w-100">
-                                        <input matInput type="password"  placeholder="Password">
+                                        <input matInput type="password"  placeholder="Password" formControlName="password">
                                     </mat-form-field>
+                                    <button  mat-raised-button color="primary" class="btnMarginLeft" type="submit">Register</button>
+                                </form>
                                
                             </div>
                         </div>
-                        <div class="row">
+                        <!-- <div class="row">
                             <div class="col-sm-12 d-flex">
-                                <button  mat-raised-button color="primary" class="btnMarginLeft">Register</button>
+                                <button  mat-raised-button color="primary" class="btnMarginLeft" type="submit">Register</button>
                             </div>
-                            </div>
+                            </div> -->
                             <div class="row mt-5">
                                 <div class="col-sm-12 d-flex justify-content-center">
                                     <span>Already have an account? <i class="fas fa-user-circle fa-2x" (click)="navigateTo()"></i></span>
