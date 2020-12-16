@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../auth.service';
+import * as registerModels from "./register.models"
 
 @Component({
   selector: 'app-register',
@@ -13,6 +14,7 @@ export class RegisterComponent implements OnInit {
   constructor(private router:Router, private authSrv:AuthService) { }
 
   parentForm:FormGroup
+  errorMsg:boolean = false
 
   ngOnInit() {
     this.initForm()
@@ -25,9 +27,19 @@ export class RegisterComponent implements OnInit {
 
   registerUser(form:FormGroup)
   {
-    console.log("clicked")
-    this.authSrv.registerUser()
-    console.log(form)
+    if(form.valid){
+    let user:registerModels.RegisterUser = form.value
+  
+    this.authSrv.registerUser(user).subscribe((response)=>{
+      console.log(response)
+    })
+    
+    }
+    else
+    { 
+      this.errorMsg = true
+      setTimeout(()=>{this.errorMsg=false},3000)
+    }
   }
 
   initForm()
@@ -41,7 +53,7 @@ export class RegisterComponent implements OnInit {
     this.parentForm = new FormGroup({
       firstName:new FormControl(first_name, Validators.required),
       lastName:new FormControl(last_name, Validators.required),
-      email:new FormControl(email, Validators.required),
+      email:new FormControl(email, [Validators.required, Validators.email]),
       password:new FormControl(password, Validators.required)
     })
   }

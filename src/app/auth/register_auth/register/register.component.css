@@ -15,7 +15,7 @@
 
 .btnMarginLeft
 {
-    margin-left: auto;
+    float: right;
 }
 
 i
@@ -29,7 +29,14 @@ mat-card
     background-color: #FFD294
 }
 
-button
+.enabledBtn
 {
     background-color: #D4827B !important;
 }
+
+.disabledBtn
+{
+    background-color: gray !important;
+}
+
+

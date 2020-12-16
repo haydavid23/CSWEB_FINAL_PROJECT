@@ -19,10 +19,7 @@ i
     height: 100%;
 }
 
-.btnMarginLeft
-{
-    margin-left: auto;
-}
+
 
 mat-card
 {
@@ -32,4 +29,5 @@ mat-card
 button
 {
     background-color: #D4827B !important;
+    float: right;
 }

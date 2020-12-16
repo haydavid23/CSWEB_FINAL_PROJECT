@@ -27,16 +27,22 @@
                                     <mat-form-field class="example-full-width w-100">
                                         <input matInput type="password"  placeholder="Password" formControlName="password">
                                     </mat-form-field>
-                                    <button  mat-raised-button color="primary" class="btnMarginLeft" type="submit">Register</button>
+                                    <div>
+                                    <div class="alert alert-danger text-center" *ngIf="errorMsg" role="alert">
+                                            Please Complete the Form
+                                    </div>
+                                    <button  mat-raised-button
+                                    class="btnMarginLeft enabledBtn" type="submit">
+                                    Register
+                                    </button>
+
+                                    </div>
                                 </form>
                                
                             </div>
                         </div>
-                        <!-- <div class="row">
-                            <div class="col-sm-12 d-flex">
-                                <button  mat-raised-button color="primary" class="btnMarginLeft" type="submit">Register</button>
-                            </div>
-                            </div> -->
+            
+       
                             <div class="row mt-5">
                                 <div class="col-sm-12 d-flex justify-content-center">
                                     <span>Already have an account? <i class="fas fa-user-circle fa-2x" (click)="navigateTo()"></i></span>
