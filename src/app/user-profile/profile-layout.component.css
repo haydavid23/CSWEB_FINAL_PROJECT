@@ -4,7 +4,12 @@
 
 }
 
-
+.logoutBtn
+{
+  margin-left: auto;
+  color: white;
+  cursor: pointer;
+}
 
 .example-toolbar
 {

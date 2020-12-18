@@ -8,6 +8,10 @@ import { AuthModule } from './auth/auth.module';
 import { SharedModuleModule } from './shared-module.module';
 import { ErrorComponentComponent } from './shared_components/error-component/error_msg/error-component.component';
 import { UserProfileGuardService } from './routing_guards/userprofile-guard.service';
+import { StoreModule } from '@ngrx/store';
+import { appReducer } from './store/app.reducer';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
 
 
 
@@ -21,7 +25,10 @@ import { UserProfileGuardService } from './routing_guards/userprofile-guard.serv
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
-    SharedModuleModule
+    SharedModuleModule,
+    StoreModule.forRoot(appReducer,{}),
+    EffectsModule.forRoot([]),
+    StoreDevtoolsModule.instrument()
 
  
   ],
