@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { of } from 'rxjs';
+import { catchError, filter, tap } from 'rxjs/operators';
 import { AuthService } from '../../auth.service';
 import * as registerModels from "./register.models"
 
@@ -14,7 +16,9 @@ export class RegisterComponent implements OnInit {
   constructor(private router:Router, private authSrv:AuthService) { }
 
   parentForm:FormGroup
-  errorMsg:boolean = false
+  formError:boolean = false
+  errorMsg:string = null
+
 
   ngOnInit() {
     this.initForm()
@@ -28,17 +32,39 @@ export class RegisterComponent implements OnInit {
   registerUser(form:FormGroup)
   {
     if(form.valid){
-    let user:registerModels.RegisterUser = form.value
+    let newUser:registerModels.RegisterUser = form.value
   
-    this.authSrv.registerUser(user).subscribe((response)=>{
-      console.log(response)
-    })
-    
+    this.authSrv.registerUser(newUser).pipe(
+      catchError((error)=>{
+        this.formError = true
+        this.errorMsg = "Unexpected Error. Please try again"
+        setTimeout(()=>{this.formError=false; this.errorMsg =  null},3000)
+        return of(error)
+      }), 
+      filter((error)=>{
+        return !error["error"]
+      }),tap((response:registerModels.emailTakenError | registerModels.successRegister)=>{
+        if(response["fail"])
+        {
+          let data = <registerModels.emailTakenError> response
+          this.formError = true
+          this.errorMsg = data.fail
+          setTimeout(()=>{this.formError=false; this.errorMsg =  null},5000)
+        }
+        else
+        {
+          let data = <registerModels.successRegister> response
+          localStorage.setItem('token', data.token.access)
+          this.router.navigate([`profile/${data.userId}`])
+        }
+
+      })).subscribe()
     }
     else
     { 
-      this.errorMsg = true
-      setTimeout(()=>{this.errorMsg=false},3000)
+      this.formError = true
+      this.errorMsg = "Please complete the form"
+      setTimeout(()=>{this.formError=false; this.errorMsg =  null},3000)
     }
   }
 

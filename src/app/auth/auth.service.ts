@@ -13,12 +13,12 @@ export class AuthService {
 
   registerUser(user:registerModels.RegisterUser):Observable<any>
   {
-    return this.http.post("http://127.0.0.1:8000/home/register",user)
+    return this.http.post("http://127.0.0.1:8000/register",user)
   }
   
   logUser(user:logginModels.LogginUser):Observable<any>
   {
-    return this.http.post("http://127.0.0.1:8000/home/login",user)
+    return this.http.post("http://127.0.0.1:8000/login",user)
   }
 
 }

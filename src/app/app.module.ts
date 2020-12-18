@@ -6,6 +6,8 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { AuthModule } from './auth/auth.module';
 import { SharedModuleModule } from './shared-module.module';
+import { ErrorComponentComponent } from './shared_components/error-component/error_msg/error-component.component';
+import { UserProfileGuardService } from './routing_guards/userprofile-guard.service';
 
 
 
@@ -23,7 +25,7 @@ import { SharedModuleModule } from './shared-module.module';
 
  
   ],
-  providers: [],
+  providers: [UserProfileGuardService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

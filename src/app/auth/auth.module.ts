@@ -6,6 +6,7 @@ import { SharedModuleModule } from '../shared-module.module';
 import { LoginComponent } from './login_auth/login/login.component';
 import { RegisterComponent } from './register_auth/register/register.component';
 import { AuthComponent } from './auth.component';
+import { ErrorComponentComponent } from '../shared_components/error-component/error_msg/error-component.component';
 
 
 @NgModule({

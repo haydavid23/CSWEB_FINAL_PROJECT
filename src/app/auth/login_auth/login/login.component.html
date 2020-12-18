@@ -19,14 +19,13 @@
                                     <mat-form-field class="example-full-width w-100">
                                         <mat-label>Enter your password</mat-label>
                                         <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
-                                        <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                        <button mat-icon-button matSuffix type="button" (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                                         <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                                         </button>
                                       </mat-form-field>
-                                      <div class="alert alert-danger" role="alert" *ngIf="errorMsg">
-                                        Please Complete the Form
-                                      </div>
-                                    
+                         
+                                      <app-error-component [errorMsg]="errorMsg" *ngIf="formError"></app-error-component>
+
                                       <button  mat-raised-button color="primary">Login</button>
                                 </form>
                                
@@ -35,7 +34,7 @@
             
                             <div class="row mt-5">
                                 <div class="col-sm-12 d-flex justify-content-center">
-                                    <span>Dont have an account?<i class="fas fa-user-plus fa-2x" (click)="navigateTo()"></i></span>
+                                    <span>Dont have an account?<i class="fas fa-user-plus fa-2x" (click)="navigateToRegister()"></i></span>
                                 </div>
                             </div>
                     </div>
