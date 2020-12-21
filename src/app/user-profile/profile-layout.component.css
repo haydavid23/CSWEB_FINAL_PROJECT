@@ -4,6 +4,12 @@
 
 }
 
+.mat-nav-list a.active
+{
+  background-color:#2A2215;
+  color:white
+}
+
 .logoutBtn
 {
   margin-left: auto;

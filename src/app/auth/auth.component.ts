@@ -17,11 +17,11 @@ export class AuthComponent implements OnInit {
 
   ngOnInit() {
     //redirects user to user profile if token is present in local storage
-    let token = JSON.parse(localStorage.getItem("token"))
-
-    if(token)
-    {
-      this.authSrv.getLoggedUser(token).pipe(catchError((error)=>{
+    let token = localStorage.getItem("token")
+  
+    if(token !== null)
+    { let tokenStr = JSON.parse(token)
+      this.authSrv.getLoggedUser(tokenStr).pipe(catchError((error)=>{
         return of(error)
       }), filter((error)=>{
       

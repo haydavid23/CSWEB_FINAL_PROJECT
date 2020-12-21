@@ -7,11 +7,13 @@ import { EffectsModule } from '@ngrx/effects';
 import { UserProfileEffects } from './store/user_profile.effects';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpInterceptorService } from './http-interceptor.service';
+import { MyMapComponent } from './my-map/my-map.component';
+import { MyPlacesComponent } from './my-places/my-places.component';
 
 
 
 @NgModule({
-  declarations: [ProfileLayoutComponent],
+  declarations: [ProfileLayoutComponent, MyMapComponent, MyPlacesComponent],
   imports: [
     CommonModule,
     ProfileRoutingRoutingModule,

@@ -54,7 +54,8 @@ export class RegisterComponent implements OnInit {
         else
         {
           let data = <registerModels.successRegister> response
-          localStorage.setItem('token', data.token.access)
+          localStorage.setItem('token', JSON.stringify(data.token.access))
+
           this.router.navigate([`profile/${data.userId}`])
         }
 
