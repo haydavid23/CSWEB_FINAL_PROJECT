@@ -2,13 +2,15 @@ import * as UserProfileActions from "../store/user_profile.actions"
 
 export interface State
 {
-    loggedUser:string;
+    loggedUserFirstName:string;
+    loggedUserId:number
 
 
 }
 
 const initialState:State = {
-    loggedUser:null,
+    loggedUserFirstName:null,
+    loggedUserId:null
 
 
 }
@@ -18,7 +20,10 @@ export function userProfileReducer(state:State=initialState, action:UserProfileA
     switch(action.type)
     {   
         case(UserProfileActions.SAVE_LOGGED_USER):
-        return {...state, loggedUser:action.payload}
+        return {...state, loggedUserFirstName:action.payload.firstName, loggedUserId:action.payload.userId}
+
+        case(UserProfileActions.DELETE_USER):
+        return {...state, loggedUserFirstName:null, loggedUserId:null}
 
         default: return state
     }

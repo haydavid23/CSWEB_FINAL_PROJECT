@@ -5,6 +5,8 @@ import { ProfileRoutingRoutingModule } from './profile-routing-routing.module';
 import { SharedModuleModule } from '../shared-module.module';
 import { EffectsModule } from '@ngrx/effects';
 import { UserProfileEffects } from './store/user_profile.effects';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpInterceptorService } from './http-interceptor.service';
 
 
 
@@ -15,6 +17,9 @@ import { UserProfileEffects } from './store/user_profile.effects';
     ProfileRoutingRoutingModule,
     SharedModuleModule,
     EffectsModule.forFeature([UserProfileEffects])
+  ],
+  providers:[
+    {provide:HTTP_INTERCEPTORS, useClass:HttpInterceptorService, multi:true}
   ]
 })
 export class UserProfileModule { }

@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import * as registerModels from  "./register_auth/register/register.models"
@@ -20,5 +20,13 @@ export class AuthService {
   {
     return this.http.post("http://127.0.0.1:8000/login",user)
   }
+
+  getLoggedUser(token:string):Observable<any>
+{
+  const header = new HttpHeaders({
+    "Authorization":`Bearer ${token}`
+  })
+  return this.http.get("http://127.0.0.1:8000/get_logged_user",{headers:header})
+}
 
 }

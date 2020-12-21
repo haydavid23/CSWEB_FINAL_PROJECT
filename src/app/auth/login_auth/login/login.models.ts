@@ -8,6 +8,6 @@ export interface successResponseLogin
 {
     refresh: string;
     access: string;
-    email:string,
+    fistName:string,
     userId: number;
 }

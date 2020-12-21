@@ -7,6 +7,9 @@ import { mergeMap, catchError, tap, filter } from 'rxjs/operators';
 import { of, Subscription } from 'rxjs';
 
 
+
+
+
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -14,7 +17,8 @@ import { of, Subscription } from 'rxjs';
 })
 export class LoginComponent implements OnInit, OnDestroy {
 
-  constructor(private router:Router, private authSrv:AuthService) { }
+  constructor(private router:Router, 
+    private authSrv:AuthService) { }
 
   hide = true;
   parentForm:FormGroup
@@ -47,7 +51,8 @@ export class LoginComponent implements OnInit, OnDestroy {
       filter((error)=>{
         return !error["error"]
       }),tap((response:loginModels.successResponseLogin)=>{
-        localStorage.setItem('token', response.access)
+  
+        localStorage.setItem('token', JSON.stringify(response.access))
         this.router.navigate([`profile/${response.userId}`])
       })).subscribe()
   
