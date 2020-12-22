@@ -9,6 +9,8 @@ import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpInterceptorService } from './http-interceptor.service';
 import { MyMapComponent } from './my-map/my-map.component';
 import { MyPlacesComponent } from './my-places/my-places.component';
+import { AgmCoreModule } from '@agm/core';
+
 
 
 
@@ -18,7 +20,9 @@ import { MyPlacesComponent } from './my-places/my-places.component';
     CommonModule,
     ProfileRoutingRoutingModule,
     SharedModuleModule,
-    EffectsModule.forFeature([UserProfileEffects])
+    EffectsModule.forFeature([UserProfileEffects]),
+    AgmCoreModule.forRoot({libraries:['places']})
+
   ],
   providers:[
     {provide:HTTP_INTERCEPTORS, useClass:HttpInterceptorService, multi:true}

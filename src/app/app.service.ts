@@ -1,13 +1,15 @@
 import { HttpClient} from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatDialog } from '@angular/material';
 import { Observable, of } from 'rxjs';
+import {AppErrorMsgComponent} from "./shared_components/error-component/app-error-msg/app-error-msg.component"
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
 
-  constructor(private httpClient:HttpClient) { }
+  constructor(private httpClient:HttpClient,private dialog:MatDialog) { }
 
 
   verifyUserToken(user_id:number):Observable<any>
@@ -21,7 +23,12 @@ export class AppService {
     {
       return of(false)
     }
-}
+  }
+
+  openAppErrorMsg(errorMsg:string)
+  {
+    this.dialog.open(AppErrorMsgComponent,{disableClose:true,data:errorMsg})
+  }
 
 
 

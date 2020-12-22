@@ -1,1 +1,21 @@
-<p>my-map works!</p>
+
+
+<agm-map [latitude]="initLat" [longitude]="initLng" [zoom]=3 (mapClick)="locationSelected($event)" (mapReady)="mapReady($event)" >
+ 
+    <button mat-raised-button color="primary" type="button" id="savePins" (click)="savePins()">Save Locations</button>
+<agm-marker *ngFor="let pin of pins" 
+    [latitude]="pin.lat" 
+    [longitude]="pin.lng" 
+    [label]="pin.label"
+    [markerDraggable]="pin.draggable"
+    (markerClick)="pinClicked($event)" >
+</agm-marker>
+
+<agm-info-window>
+    <strong>Test info</strong>
+  </agm-info-window>
+
+</agm-map>
+
+
+
