@@ -8,6 +8,7 @@ export const DELETE_USER= "DELETE_USER";
 export const SAVE_USER_PIN= "SAVE_USER_PIN";
 export const INIT_SAVE_USER_PIN= "INIT_SAVE_USER_PIN";
 export const SAVE_USER_PIN_RESPONSE= "SAVE_USER_PIN_RESPONSE";
+export const GET_USER_PINS= "GET_USER_PINS";
 
 
 
@@ -28,12 +29,12 @@ export class DeleteUser implements Action{
 
 export class InitSaveUserPins implements Action{
     readonly type = INIT_SAVE_USER_PIN;
-    constructor(public payload:Array<my_map_models.pins>){}
+    constructor(public payload:my_map_models.pins[]){}
 }
 
 export class SaveUserPins implements Action{
     readonly type = SAVE_USER_PIN;
-    constructor(public payload:Array<my_map_models.pins>){}
+    constructor(public payload:my_map_models.pins[]){}
 }
 
 export class SaveUserPinsResponse implements Action{
@@ -41,7 +42,12 @@ export class SaveUserPinsResponse implements Action{
     constructor(public payload:string){}
 }
 
+export class GetUserPins implements Action{
+    readonly type = GET_USER_PINS;
+   
+}
+
 
 export type UserProfileUserActions =  SaveLoggedUser | 
 GetLoggedUser | DeleteUser | SaveUserPins |
- InitSaveUserPins | SaveUserPinsResponse
+ InitSaveUserPins | SaveUserPinsResponse |GetUserPins

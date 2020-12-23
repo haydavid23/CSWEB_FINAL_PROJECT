@@ -29,6 +29,10 @@ export function userProfileReducer(state:State=initialState, action:UserProfileA
         case(UserProfileActions.DELETE_USER):
         return {...state, loggedUserFirstName:null, loggedUserId:null}
 
+        case(UserProfileActions.SAVE_USER_PIN):
+        console.log(action.payload)
+        return {...state, locationPins:action.payload}
+
         default: return state
     }
 }

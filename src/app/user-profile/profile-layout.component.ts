@@ -21,6 +21,7 @@ export class ProfileLayoutComponent implements OnInit,OnDestroy {
   ngOnInit() {
 
     this.store.dispatch(new userProfileActions.GetLoggedUser())
+    this.store.dispatch(new userProfileActions.GetUserPins())
     
   }
 

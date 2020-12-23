@@ -18,6 +18,7 @@ export class MyMapComponent implements OnInit, OnDestroy {
   initLat =  25.761681;
   initLng = -80.191788;
   actionsSub:Subscription;
+  storeSub:Subscription
 
   pins:Array<models.pins> = []
   newPins:Array<models.pins> = []
@@ -26,12 +27,27 @@ export class MyMapComponent implements OnInit, OnDestroy {
   constructor(private store:Store<fromApp.AppState>, private actions$:Actions, private appSrv:AppService) { }
 
   ngOnInit() {
-    //listen for save pin action response
+
+    this.storeSub = this.store.select("userProfile").subscribe((state)=>{
+        if(state.locationPins != null)
+        {
+          this.pins = state.locationPins
+        }
+        
+    })
+
+
+    // listen for save pin action response
     this.actionsSub = this.actions$.pipe(ofType<userProfileActions.SaveUserPinsResponse>(userProfileActions.SAVE_USER_PIN_RESPONSE)).subscribe(
       (response)=>{
+      
         if(response.payload == "unable to save pins")
         {
           this.appSrv.openAppErrorMsg(response.payload)
+        }
+        else
+        {
+          this.newPins = []
         }
     })
   }
@@ -40,8 +56,9 @@ export class MyMapComponent implements OnInit, OnDestroy {
 
   locationSelected(event:MouseEvent)
   {
-    this.pins.push({lat:event['coords'].lat, lng: event['coords'].lng, infoContent:"test", markerDragable:true})
-    this.newPins.push({lat:event['coords'].lat, lng: event['coords'].lng,infoContent:"test",markerDragable:true})
+    this.pins = [...this.pins,{lat:event['coords'].lat, lng: event['coords'].lng,infoContent:"test",markerDragable:true}]
+    this.newPins = [...this.newPins,{lat:event['coords'].lat, lng: event['coords'].lng,infoContent:"test",markerDragable:true}]
+
     
   }
 
@@ -59,12 +76,14 @@ export class MyMapComponent implements OnInit, OnDestroy {
   savePins()
   {
     this.store.dispatch(new userProfileActions.InitSaveUserPins(this.newPins))
+   
     
   }
 
   ngOnDestroy()
   {
     this.actionsSub.unsubscribe()
+    this.storeSub.unsubscribe()
   }
 
 }

@@ -9,6 +9,7 @@ import * as userProfileActions from "../store/user_profile.actions"
 import * as fromApp from "../../store/app.reducer"
 import * as userProfileModels from "../user_profile.models"
 import { AppService } from "src/app/app.service"
+import * as my_map_models from "../my-map/my_map.models"
 
 
 
@@ -38,21 +39,37 @@ export class UserProfileEffects {
   }))
 
 
-  @Effect() saveUserPins= this.actions$.pipe(ofType<userProfileActions.InitSaveUserPins>(userProfileActions.INIT_SAVE_USER_PIN), mergeMap((action:userProfileActions.InitSaveUserPins)=>{
+  @Effect() initSaveUserPins= this.actions$.pipe(ofType<userProfileActions.InitSaveUserPins>(userProfileActions.INIT_SAVE_USER_PIN), mergeMap((action:userProfileActions.InitSaveUserPins)=>{
     let pins = action.payload
-    console.log(pins)
-    return this.http.post("http://127.0.0.1:8000/save_user_pins",pins).pipe(map((response:{[msg:string]:string})=>{
+    return this.http.post("http://127.0.0.1:8000/save_user_pins",pins)
+  }),mergeMap((response:{[msg:string]:string})=>{
+    if(response["error"])
+    {
+      return [new userProfileActions.SaveUserPinsResponse(response["error"])]
+    }
+    else
+    {
+      
+      return [new userProfileActions.GetUserPins(),new userProfileActions.SaveUserPinsResponse("success")]
+    }
+
+  }))
+
+
+  @Effect({dispatch:false}) getUserPins= this.actions$.pipe(ofType<userProfileActions.GetUserPins>(userProfileActions.GET_USER_PINS), mergeMap((action:userProfileActions.GetUserPins)=>{
+  
+    return this.http.get<my_map_models.pins[] | {[error:string]:string}>("http://127.0.0.1:8000/get_user_pins")
+  }),map((response)=>{
       if(response["error"])
       {
-        return new userProfileActions.SaveUserPinsResponse(response["error"])
+        this.appSrv.openAppErrorMsg(response["error"])
+        // logic where there is an error getting pins
       }
       else
       {
-        
-        this.store.dispatch(new userProfileActions.SaveUserPins(pins))
+
+        this.store.dispatch(new userProfileActions.SaveUserPins(<my_map_models.pins[]>response))
       }
-  
-    }))
   }))
 
   }
