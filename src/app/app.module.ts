@@ -14,6 +14,7 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { EffectsModule } from '@ngrx/effects';
 import { PageNotFoundComponent } from './shared_components/error-component/page_not_found/page-not-found/page-not-found.component';
 import { AppErrorMsgComponent } from './shared_components/error-component/app-error-msg/app-error-msg.component';
+import { AppDialogMsgComponent } from './shared_components/error-component/app-dialog-msg/app-dialog-msg.component';
 
 
 
@@ -23,7 +24,8 @@ import { AppErrorMsgComponent } from './shared_components/error-component/app-er
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    AppDialogMsgComponent
     
 
   ],
@@ -40,7 +42,8 @@ import { AppErrorMsgComponent } from './shared_components/error-component/app-er
  
   ],
   providers: [UserProfileGuardService],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
+  entryComponents:[AppDialogMsgComponent]
 
 })
 export class AppModule { }

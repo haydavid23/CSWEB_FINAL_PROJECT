@@ -6,6 +6,7 @@ export interface State
     loggedUserFirstName:string;
     loggedUserId:number
     locationPins:Array<my_map_models.pins>
+    dbResponseMsg:string
     
 
 
@@ -14,7 +15,8 @@ export interface State
 const initialState:State = {
     loggedUserFirstName:null,
     loggedUserId:null,
-    locationPins:null
+    locationPins:null,
+    dbResponseMsg:null
 
 
 }
@@ -30,8 +32,10 @@ export function userProfileReducer(state:State=initialState, action:UserProfileA
         return {...state, loggedUserFirstName:null, loggedUserId:null}
 
         case(UserProfileActions.SAVE_USER_PIN):
-        console.log(action.payload)
         return {...state, locationPins:action.payload}
+
+        // case(UserProfileActions.DB_RESPONSE):
+        // return {...state, dbResponseMsg:action.payload}
 
         default: return state
     }

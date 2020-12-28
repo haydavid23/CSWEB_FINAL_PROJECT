@@ -7,8 +7,12 @@ export const GET_LOGGED_USER= "GET_LOGGED_USER";
 export const DELETE_USER= "DELETE_USER";
 export const SAVE_USER_PIN= "SAVE_USER_PIN";
 export const INIT_SAVE_USER_PIN= "INIT_SAVE_USER_PIN";
-export const SAVE_USER_PIN_RESPONSE= "SAVE_USER_PIN_RESPONSE";
+export const DB_RESPONSE= "DB_RESPONSE";
 export const GET_USER_PINS= "GET_USER_PINS";
+export const DELETED_PINS= "DELETED_PINS";
+export const DELETE_PIN_RESPONSE= "DELETE_PIN_RESPONSE";
+export const SAVE_PIN_RESPONSE= "SAVE_PIN_RESPONSE";
+
 
 
 
@@ -37,8 +41,8 @@ export class SaveUserPins implements Action{
     constructor(public payload:my_map_models.pins[]){}
 }
 
-export class SaveUserPinsResponse implements Action{
-    readonly type = SAVE_USER_PIN_RESPONSE;
+export class DbResponse implements Action{
+    readonly type = DB_RESPONSE;
     constructor(public payload:string){}
 }
 
@@ -47,7 +51,25 @@ export class GetUserPins implements Action{
    
 }
 
+export class DeletedPins implements Action{
+    readonly type = DELETED_PINS;
+    constructor(public payload:my_map_models.DeletedPin[]){}
+   
+}
+
+export class DeletePinResponse implements Action{
+    readonly type = DELETE_PIN_RESPONSE;
+    constructor(public payload:string){}
+   
+}
+
+export class SavePinResponse implements Action{
+    readonly type = SAVE_PIN_RESPONSE;
+    constructor(public payload:string){}
+   
+}
+
 
 export type UserProfileUserActions =  SaveLoggedUser | 
 GetLoggedUser | DeleteUser | SaveUserPins |
- InitSaveUserPins | SaveUserPinsResponse |GetUserPins
+ InitSaveUserPins | DbResponse |GetUserPins | DeletedPins | DeletePinResponse | SavePinResponse

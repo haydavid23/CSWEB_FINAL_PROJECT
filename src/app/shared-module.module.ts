@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
-import { MatButtonModule, MatDialogModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatNavList, MatSidenavModule, MatToolbarModule, MatTooltipModule} from '@angular/material';
+import { MatButtonModule, MatDialogModule, MatDividerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatNavList, MatSidenavModule, MatToolbarModule, MatTooltipModule} from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PageNotFoundComponent } from './shared_components/error-component/page_not_found/page-not-found/page-not-found.component';
 import { AppErrorMsgComponent } from './shared_components/error-component/app-error-msg/app-error-msg.component';
+import { AppDialogMsgComponent } from './shared_components/error-component/app-dialog-msg/app-dialog-msg.component';
 
 
 
@@ -31,7 +32,8 @@ import { AppErrorMsgComponent } from './shared_components/error-component/app-er
     MatToolbarModule,
     MatSidenavModule,
     MatListModule,
-    MatDialogModule
+    MatDialogModule,
+    MatDividerModule
   ],
   exports:[
   
@@ -49,7 +51,8 @@ import { AppErrorMsgComponent } from './shared_components/error-component/app-er
     MatListModule,
     PageNotFoundComponent,
     MatDialogModule,
-    AppErrorMsgComponent
+    AppErrorMsgComponent,
+    MatDialogModule
   ],
   entryComponents:[AppErrorMsgComponent]
 })

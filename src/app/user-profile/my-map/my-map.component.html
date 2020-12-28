@@ -1,8 +1,17 @@
 
 
-<agm-map [latitude]="initLat" [longitude]="initLng" [zoom]=3 (mapClick)="locationSelected($event)" (mapReady)="mapReady($event)" >
+<agm-map  [latitude]="initLat" [longitude]="initLng" [zoom]=3 (mapClick)="locationSelected($event)" (mapReady)="mapReady($event)" >
+   
+
+            
+        <div class="alert alert-danger w-50 text-center" role="alert" id="getError">
+            <h5>Error!
+            Unable to load pins. Please refresh app</h5>
+        </div>
+
+
  
-    <button mat-raised-button color="primary" type="button" id="savePins" (click)="savePins()">Save Locations</button>
+    <button [disabled]="disableMap" mat-raised-button color="primary" type="button" id="savePins" (click)="savePins()">Save</button>
 <agm-marker *ngFor="let pin of pins" 
     [latitude]="pin.lat" 
     [longitude]="pin.lng" 
@@ -11,9 +20,53 @@
     (markerClick)="pinClicked($event)" >
 </agm-marker>
 
-<agm-info-window>
-    <strong>Test info</strong>
-  </agm-info-window>
+<!-- <agm-marker 
+
+    [latitude]="initLat" 
+    [longitude]="initLng"
+    [iconUrl]="{
+      url: '../../assets/home-solid.svg',
+      scaledSize: {
+          width: 40,
+          height: 20
+      }
+  }"
+    >
+</agm-marker> -->
+
+<agm-marker 
+
+    [latitude]="initLat" 
+    [longitude]="initLng"
+    [openInfoWindow]='true'
+    [iconUrl]='{url: "../../assets/home-solid.svg", anchor:{x:25,y:40},  scaledSize: {
+      width: 40,
+      height: 60
+  }}'
+    >
+
+    <agm-info-window>
+      <mat-list>
+        <mat-list-item>
+          HomeTown: Miami, Fl
+        </mat-list-item>
+        <mat-divider></mat-divider>
+        <mat-list-item>
+                <mat-form-field class="example-full-width">
+        <mat-label>Set new HomeTown</mat-label>
+        <input matInput>
+      </mat-form-field>
+        </mat-list-item>
+  
+      </mat-list>
+
+    </agm-info-window>
+</agm-marker>
+
+
+
+
+
 
 </agm-map>
 

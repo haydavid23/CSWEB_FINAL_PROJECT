@@ -6,3 +6,10 @@ export interface pins
     infoContent:string;
 }
 
+export interface DeletedPin
+{
+    latitude:number;
+    longitude:number;
+
+}
+

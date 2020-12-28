@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core"
-import { act, Actions, Effect, ofType } from "@ngrx/effects"
+import {  Actions, Effect, ofType } from "@ngrx/effects"
 import { filter, mergeMap, withLatestFrom, tap, map, catchError } from "rxjs/operators"
 import { Store } from '@ngrx/store'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
@@ -45,31 +45,50 @@ export class UserProfileEffects {
   }),mergeMap((response:{[msg:string]:string})=>{
     if(response["error"])
     {
-      return [new userProfileActions.SaveUserPinsResponse(response["error"])]
+      // return [new userProfileActions.DbResponse(response["error"])]
+      return [new userProfileActions.SavePinResponse(response["error"])]
     }
     else
     {
       
-      return [new userProfileActions.GetUserPins(),new userProfileActions.SaveUserPinsResponse("success")]
+      // return [new userProfileActions.GetUserPins(),new userProfileActions.DbResponse("success")]
+      return [new userProfileActions.GetUserPins(),new userProfileActions.SavePinResponse("success")]
     }
 
   }))
 
 
-  @Effect({dispatch:false}) getUserPins= this.actions$.pipe(ofType<userProfileActions.GetUserPins>(userProfileActions.GET_USER_PINS), mergeMap((action:userProfileActions.GetUserPins)=>{
+  @Effect() getUserPins= this.actions$.pipe(ofType<userProfileActions.GetUserPins>(userProfileActions.GET_USER_PINS), mergeMap((action:userProfileActions.GetUserPins)=>{
   
     return this.http.get<my_map_models.pins[] | {[error:string]:string}>("http://127.0.0.1:8000/get_user_pins")
-  }),map((response)=>{
+  }),mergeMap((response)=>{
       if(response["error"])
       {
-        this.appSrv.openAppErrorMsg(response["error"])
-        // logic where there is an error getting pins
+        return [new userProfileActions.DbResponse(response["error"])]
+
       }
       else
       {
-
-        this.store.dispatch(new userProfileActions.SaveUserPins(<my_map_models.pins[]>response))
+        return [new userProfileActions.DbResponse("success"),new userProfileActions.SaveUserPins(<my_map_models.pins[]>response)]
+        
+        
       }
+  }))
+
+  @Effect({dispatch:false}) deletePin= this.actions$.pipe(ofType<userProfileActions.DeletedPins>(userProfileActions.DELETED_PINS), mergeMap((action:userProfileActions.DeletedPins)=>{
+    
+    return this.http.post("http://127.0.0.1:8000/delete_user_pin",action.payload).pipe(map((response)=>{
+      if(response["error"])
+      { 
+        this.store.dispatch(new userProfileActions.DeletePinResponse(response["error"]))
+      }
+      else
+      { 
+        this.store.dispatch(new userProfileActions.DeletePinResponse("success"))
+        
+      }
+  }))
+ 
   }))
 
   }
