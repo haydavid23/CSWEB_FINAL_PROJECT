@@ -5,8 +5,16 @@
     <mat-toolbar  class="example-toolbar">
       <button mat-icon-button (click)="snav.toggle()" class="hamburger"><mat-icon>menu</mat-icon></button>
       <h1 class="example-app-name">Where to Pin</h1>
-     
-      <span class="logoutBtn" (click)="logout()">Logout</span>
+
+      <button mat-button [matMenuTriggerFor]="menu" class="text-white menuDropDown">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+      <button mat-menu-item [routerLink]="['user-info']" >Profile</button>
+      <button mat-menu-item (click)="logout()">
+        Logout
+      </button>
+      </mat-menu>
 
     </mat-toolbar>
   

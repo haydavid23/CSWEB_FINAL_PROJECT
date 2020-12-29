@@ -10,13 +10,14 @@ import { HttpInterceptorService } from './http-interceptor.service';
 import { MyMapComponent } from './my-map/my-map.component';
 import { MyPlacesComponent } from './my-places/my-places.component';
 import { AgmCoreModule } from '@agm/core';
+import { UserInfoComponent } from './user-info/user-info.component';
 
 
 
 
 
 @NgModule({
-  declarations: [ProfileLayoutComponent, MyMapComponent, MyPlacesComponent],
+  declarations: [ProfileLayoutComponent, MyMapComponent, MyPlacesComponent, UserInfoComponent],
   imports: [
     CommonModule,
     ProfileRoutingRoutingModule,

@@ -107,9 +107,17 @@ export class MyMapComponent implements OnInit, OnDestroy {
 
   pinClicked(pin:models.DeletedPin)
   {
-    this.deletePins(pin)
+    // this.deletePins(pin)
 
 
+  }
+
+  setHome(lat, lng)
+  {
+      console.log(lat)
+      console.log(lng)
+      let coords = {lat:lat, lng:lng}
+      this.store.dispatch(new userProfileActions.SetUserHomeTown(coords))
   }
 
   deletePins(pin)

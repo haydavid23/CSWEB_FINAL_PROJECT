@@ -12,6 +12,7 @@ export const GET_USER_PINS= "GET_USER_PINS";
 export const DELETED_PINS= "DELETED_PINS";
 export const DELETE_PIN_RESPONSE= "DELETE_PIN_RESPONSE";
 export const SAVE_PIN_RESPONSE= "SAVE_PIN_RESPONSE";
+export const SET_USER_HOMETOWN= "SET_USER_HOMETOWN";
 
 
 
@@ -69,7 +70,13 @@ export class SavePinResponse implements Action{
    
 }
 
+export class SetUserHomeTown implements Action{
+    readonly type = SET_USER_HOMETOWN;
+    constructor(public payload:{lat:number, lng:number}){}
+   
+}
+
 
 export type UserProfileUserActions =  SaveLoggedUser | 
-GetLoggedUser | DeleteUser | SaveUserPins |
+GetLoggedUser | DeleteUser | SaveUserPins | SetUserHomeTown|
  InitSaveUserPins | DbResponse |GetUserPins | DeletedPins | DeletePinResponse | SavePinResponse

@@ -91,6 +91,16 @@ export class UserProfileEffects {
  
   }))
 
+
+  @Effect({dispatch:false}) setUserHometown= this.actions$.pipe(ofType<userProfileActions.SetUserHomeTown>(userProfileActions.SET_USER_HOMETOWN), mergeMap((action:userProfileActions.SetUserHomeTown)=>{
+      let coord = {"lat":action.payload.lat, "lng" :action.payload.lng}
+
+    return this.http.post("http://127.0.0.1:8000/set_user_hometown",coord).pipe(map((response)=>{
+      console.log(response)
+  }))
+ 
+  }))
+
   }
 
 

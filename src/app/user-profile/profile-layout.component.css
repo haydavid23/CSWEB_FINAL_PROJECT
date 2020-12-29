@@ -10,11 +10,17 @@
   color:white
 }
 
-.logoutBtn
+/* .logoutBtn
 {
   margin-left: auto;
   color: white;
   cursor: pointer;
+} */
+
+.menuDropDown
+{
+  margin-left: auto;
+
 }
 
 .example-toolbar
