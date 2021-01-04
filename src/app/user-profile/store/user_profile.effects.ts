@@ -39,19 +39,20 @@ export class UserProfileEffects {
   }))
 
 
+
   @Effect() initSaveUserPins= this.actions$.pipe(ofType<userProfileActions.InitSaveUserPins>(userProfileActions.INIT_SAVE_USER_PIN), mergeMap((action:userProfileActions.InitSaveUserPins)=>{
-    let pins = action.payload
-    return this.http.post("http://127.0.0.1:8000/save_user_pins",pins)
+    let locationSelected = action.payload
+    return this.http.post("http://127.0.0.1:8000/save_user_pin",locationSelected)
   }),mergeMap((response:{[msg:string]:string})=>{
+
     if(response["error"])
     {
-      // return [new userProfileActions.DbResponse(response["error"])]
+
       return [new userProfileActions.SavePinResponse(response["error"])]
     }
     else
     {
       
-      // return [new userProfileActions.GetUserPins(),new userProfileActions.DbResponse("success")]
       return [new userProfileActions.GetUserPins(),new userProfileActions.SavePinResponse("success")]
     }
 
@@ -62,31 +63,40 @@ export class UserProfileEffects {
   
     return this.http.get<my_map_models.pins[] | {[error:string]:string}>("http://127.0.0.1:8000/get_user_pins")
   }),mergeMap((response)=>{
+    console.log("get pins")
       if(response["error"])
       {
-        return [new userProfileActions.DbResponse(response["error"])]
+        return [new userProfileActions.DbGetResponse("fail")]
 
       }
       else
       {
-        return [new userProfileActions.DbResponse("success"),new userProfileActions.SaveUserPins(<my_map_models.pins[]>response)]
+        console.log(response)
+        return [new userProfileActions.DbGetResponse("success"),new userProfileActions.SaveUserPins(<my_map_models.pins[]>response)]
         
         
       }
   }))
 
-  @Effect({dispatch:false}) deletePin= this.actions$.pipe(ofType<userProfileActions.DeletedPins>(userProfileActions.DELETED_PINS), mergeMap((action:userProfileActions.DeletedPins)=>{
+
+
+
+  @Effect() deletePin= this.actions$.pipe(ofType<userProfileActions.InitDeletedPin>(userProfileActions.INIT_DELETED_PIN), mergeMap((action:userProfileActions.InitDeletedPin)=>{
     
-    return this.http.post("http://127.0.0.1:8000/delete_user_pin",action.payload).pipe(map((response)=>{
+    return this.http.post("http://127.0.0.1:8000/delete_user_pin",action.payload).pipe(mergeMap((response)=>{
       if(response["error"])
       { 
-        this.store.dispatch(new userProfileActions.DeletePinResponse(response["error"]))
+  
+        this.appSrv.openAppErrorMsg("Unable to delete pin")
+        return []
       }
       else
       { 
-        this.store.dispatch(new userProfileActions.DeletePinResponse("success"))
+        this.appSrv.openAppDialogMsg("Pin(s) Deleted")
+        return [new userProfileActions.GetUserPins()]
         
       }
+
   }))
  
   }))
@@ -96,10 +106,38 @@ export class UserProfileEffects {
       let coord = {"lat":action.payload.lat, "lng" :action.payload.lng}
 
     return this.http.post("http://127.0.0.1:8000/set_user_hometown",coord).pipe(map((response)=>{
-      console.log(response)
-  }))
+  
+      if(response["error"])
+      {
+          this.appSrv.openAppErrorMsg(response["error"])
+      }
+      else
+      {
+        this.store.dispatch(new userProfileActions.GetUserHomeTown())
+       
+       
+      }
+  })) 
  
   }))
+
+  @Effect() getUserHometown= this.actions$.pipe(ofType<userProfileActions.GetUserHomeTown>(userProfileActions.GET_USER_HOMETOWN), mergeMap((action:userProfileActions.GetUserHomeTown)=>{
+    
+  return this.http.get("http://127.0.0.1:8000/get_user_hometown").pipe(mergeMap((response:my_map_models.UserHometown | string)=>{
+      console.log(response)
+
+    if(response["error"])
+    {
+      return [new userProfileActions.SaveDbResUserHomeTown(response["error"])]
+    }
+    else
+    {
+      return [new userProfileActions.SaveUserHomeTown(<my_map_models.UserHometown>response)]
+    }
+
+}))
+
+}))
 
   }
 

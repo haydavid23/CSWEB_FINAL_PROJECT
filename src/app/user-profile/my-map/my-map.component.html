@@ -11,62 +11,52 @@
 
 
  
-    <button [disabled]="disableMap" mat-raised-button color="primary" type="button" id="savePins" (click)="savePins()">Save</button>
-<agm-marker *ngFor="let pin of pins" 
+
+
+<agm-marker 
+    *ngFor="let pin of pins;trackBy:trackByLatLng" 
     [latitude]="pin.lat" 
     [longitude]="pin.lng" 
-    [openInfoWindow]='true'
-    (markerClick)="pinClicked($event)" >
+    [iconUrl]='pin.hometown?{url: "../../assets/home-solid.svg", anchor:{x:25,y:40},  scaledSize: {
+      width: 40,
+      height: 60}}:""'
+    (markerClick)="pinClicked(pin, $event)" >
 
-    <agm-info-window>
+    <agm-info-window #infoWindow *ngIf="!pin['hometown']">
       <mat-list>
+        <mat-list-item>
+          <span>{{fullLocationName}}</span>
+          <mat-divider></mat-divider>
+        </mat-list-item>
         <mat-list-item>
           <button mat-button color="primary" (click)="setHome(pin.lat, pin.lng)" type="button">
             Set as Home <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
-
           </button>
-          
         </mat-list-item>
         <mat-list-item>
           <button mat-button color="primary">See Details</button>
         </mat-list-item>
-        <mat-divider></mat-divider>
-     
-  
-      </mat-list>
-
-    </agm-info-window>
-</agm-marker>
-
-
-
-<agm-marker 
-
-    [latitude]="initLat" 
-    [longitude]="initLng"
-    [markerDraggable]="true"
-    [openInfoWindow]='true'
-    [iconUrl]='{url: "../../assets/home-solid.svg", anchor:{x:25,y:40},  scaledSize: {
-      width: 40,
-      height: 60}}'
-    >
-
-    <agm-info-window>
-      <mat-list>
         <mat-list-item>
-          HomeTown: Miami, Fl
+          <button mat-button color="primary" type="button" (click)="deletePin(pin, infoWindow)">Delete Pin</button>
         </mat-list-item>
         <mat-divider></mat-divider>
-     
-  
       </mat-list>
-
     </agm-info-window>
+
+    <!-- hometown info window -->
+<agm-info-window #hometownInfoWindow  *ngIf="pin['hometown']">
+  <mat-list>
+    <mat-list-item>
+      {{city + ', ' + state + ', ' + country }}
+    </mat-list-item>
+    <mat-divider></mat-divider>
+ 
+
+  </mat-list>
+
+</agm-info-window>
+
 </agm-marker>
-
-
-
-
 
 
 </agm-map>

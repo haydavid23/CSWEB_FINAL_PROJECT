@@ -7,12 +7,14 @@ export const GET_LOGGED_USER= "GET_LOGGED_USER";
 export const DELETE_USER= "DELETE_USER";
 export const SAVE_USER_PIN= "SAVE_USER_PIN";
 export const INIT_SAVE_USER_PIN= "INIT_SAVE_USER_PIN";
-export const DB_RESPONSE= "DB_RESPONSE";
+export const DB_GET_RESPONSE= "DB_GET_RESPONSE";
 export const GET_USER_PINS= "GET_USER_PINS";
-export const DELETED_PINS= "DELETED_PINS";
-export const DELETE_PIN_RESPONSE= "DELETE_PIN_RESPONSE";
+export const INIT_DELETED_PIN= "INIT_DELETED_PIN";
 export const SAVE_PIN_RESPONSE= "SAVE_PIN_RESPONSE";
 export const SET_USER_HOMETOWN= "SET_USER_HOMETOWN";
+export const GET_USER_HOMETOWN= "GET_USER_HOMETOWN";
+export const SAVE_USER_HOMETOWN= "SAVE_USER_HOMETOWN";
+export const DB_RES_USER_HOMETOWN= "DB_RES_USER_HOMETOWN";
 
 
 
@@ -32,18 +34,21 @@ export class DeleteUser implements Action{
     readonly type = DELETE_USER;
 }
 
+
+
 export class InitSaveUserPins implements Action{
     readonly type = INIT_SAVE_USER_PIN;
-    constructor(public payload:my_map_models.pins[]){}
+    constructor(public payload:my_map_models.pins){}
 }
+
 
 export class SaveUserPins implements Action{
     readonly type = SAVE_USER_PIN;
     constructor(public payload:my_map_models.pins[]){}
 }
 
-export class DbResponse implements Action{
-    readonly type = DB_RESPONSE;
+export class DbGetResponse implements Action{
+    readonly type = DB_GET_RESPONSE;
     constructor(public payload:string){}
 }
 
@@ -52,17 +57,19 @@ export class GetUserPins implements Action{
    
 }
 
-export class DeletedPins implements Action{
-    readonly type = DELETED_PINS;
-    constructor(public payload:my_map_models.DeletedPin[]){}
+// export class DeletedPins implements Action{
+//     readonly type = DELETED_PINS;
+//     constructor(public payload:my_map_models.DeletedPin[]){}
+   
+// }
+
+export class InitDeletedPin implements Action{
+    readonly type = INIT_DELETED_PIN;
+    constructor(public payload:my_map_models.DeletedPin){}
    
 }
 
-export class DeletePinResponse implements Action{
-    readonly type = DELETE_PIN_RESPONSE;
-    constructor(public payload:string){}
-   
-}
+
 
 export class SavePinResponse implements Action{
     readonly type = SAVE_PIN_RESPONSE;
@@ -76,7 +83,22 @@ export class SetUserHomeTown implements Action{
    
 }
 
+export class GetUserHomeTown implements Action{
+    readonly type = GET_USER_HOMETOWN;
+
+}
+
+export class SaveUserHomeTown implements Action{
+    readonly type = SAVE_USER_HOMETOWN;
+    constructor(public payload:{lat:number, lng:number}){}
+}
+
+export class SaveDbResUserHomeTown implements Action{
+    readonly type = DB_RES_USER_HOMETOWN;
+    constructor(public payload:string){}
+}
+
 
 export type UserProfileUserActions =  SaveLoggedUser | 
-GetLoggedUser | DeleteUser | SaveUserPins | SetUserHomeTown|
- InitSaveUserPins | DbResponse |GetUserPins | DeletedPins | DeletePinResponse | SavePinResponse
+GetLoggedUser | DeleteUser | SaveUserPins | SetUserHomeTown| GetUserHomeTown | SaveUserHomeTown | SaveDbResUserHomeTown|
+ InitSaveUserPins | DbGetResponse |GetUserPins | InitDeletedPin | SavePinResponse
