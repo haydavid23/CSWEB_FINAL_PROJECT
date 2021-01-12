@@ -23,8 +23,8 @@ import { UserInfoComponent } from './user-info/user-info.component';
     ProfileRoutingRoutingModule,
     SharedModuleModule,
     EffectsModule.forFeature([UserProfileEffects]),
-    AgmCoreModule.forRoot({libraries:['places'], apiKey:'AIzaSyBYXy2iAn4e4tJC3d-06jvKyZ5U47PKkf0'})
-    // AgmCoreModule.forRoot({libraries:['places']})
+    // AgmCoreModule.forRoot({libraries:['places'], apiKey:'AIzaSyBYXy2iAn4e4tJC3d-06jvKyZ5U47PKkf0'})
+    AgmCoreModule.forRoot({libraries:['places']})
   ],
   providers:[
     {provide:HTTP_INTERCEPTORS, useClass:HttpInterceptorService, multi:true}

@@ -6,10 +6,9 @@ import * as models from "./my_map.models"
 import {  Actions, ofType } from '@ngrx/effects';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { AppService } from 'src/app/app.service';
-import { AgmInfoWindow, InfoWindowManager} from '@agm/core';
-import { InfoWindow } from '@agm/core/services/google-maps-types';
+import { AgmInfoWindow, AgmMarker} from '@agm/core';
 import { MapsAPILoader } from '@agm/core';
-import { throwToolbarMixedModesError } from '@angular/material';
+
 
 
 
@@ -40,7 +39,7 @@ export class MyMapComponent implements OnInit, OnDestroy {
   dbResponseError = new BehaviorSubject<any>(null);
   dbResponseErrorErrorSub:Subscription;
 
-  infoWindowOpened = null
+  infoWindowOpened:boolean = false
   previous_info_window = null
 
   private geoCoder;
@@ -75,6 +74,8 @@ export class MyMapComponent implements OnInit, OnDestroy {
 
   
     this.storeSub = this.store.select("userProfile").subscribe((state)=>{
+      //resets marker opened infowindow
+      this.previous_info_window = null
        
         if(state.locationPins != null)
         {
@@ -112,45 +113,59 @@ export class MyMapComponent implements OnInit, OnDestroy {
   }
 
   getLocationName(latitude, longitude) {
+    this.fullLocationName = null
     this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
 
 
       if (status === 'OK') {
         if (results.length > 1) {
-          console.log(results)
-
-            results[0].address_components.forEach((addressParts)=>{
-                if(addressParts.types[0] == "locality")
-                {
-                  this.city = addressParts.long_name + ","
-                  return
-                }
-                else if(addressParts.types[0] ==  "administrative_area_level_3" && !this.city)
-                {
-                  this.city = addressParts.long_name + ","
-                  return
+       
+            for(let i = 0; i<results[0].address_components.length; i++){
+                let addressComponent = results[0].address_components[i]
+     
+                if(addressComponent.types[0] == "establishment")
+                { 
+                  
+                  this.fullLocationName = addressComponent.long_name
+                  break
                 }
 
-                if(addressParts.types[0] == "administrative_area_level_1")
+                if(addressComponent.types[0] == "locality")
                 {
-                  this.state = addressParts.long_name + ","
-                  return
+                  this.city = addressComponent.long_name + ","
+                  continue
                 }
-                if(addressParts.types[0] == "country")
+                else if(addressComponent.types[0] ==  "administrative_area_level_3" && !this.city)
                 {
-                  this.country = addressParts.long_name
-                  return
+                  this.city = addressComponent.long_name + ","
+                  continue
                 }
-            })
-            this.fullLocationName =`${this.city?this.city:""} ${this.state?this.state:""} ${this.country}`
-
-
+                if(addressComponent.types[0] == "administrative_area_level_1")
+                {
+                  this.state = addressComponent.long_name + ","
+                  continue
+                }
+                if(addressComponent.types[0] == "country")
+                {
+                  this.country = addressComponent.long_name
+                  continue
+                }
+                
+            }
+   
+            if(this.fullLocationName == null)
+            {
+              this.fullLocationName =`${this.city?this.city:""} ${this.state?this.state:""} ${this.country}`
+             
+            }
+   
         } else {
           window.alert('No results found');
         }
-      } else {
-        window.alert('Geocoder failed due to: ' + status);
-      }
+      } 
+      // else {
+      //   window.alert('Geocoder failed due to: ' + status);
+      // }
     
     });
   }
@@ -164,29 +179,48 @@ export class MyMapComponent implements OnInit, OnDestroy {
   
   locationSelected(event:MouseEvent)
   { 
- 
-    let location= {lat:event['coords'].lat, lng: event['coords'].lng,infoContent:"test",markerDragable:true}
-    this.store.dispatch(new userProfileActions.InitSaveUserPins(location))
+    
+    
+    // if(!this.infoWindowOpened){
+    // let location= {lat:event['coords'].lat, lng: event['coords'].lng,infoContent:"test",markerDragable:true}
+    // this.store.dispatch(new userProfileActions.InitSaveUserPins(location))
+    // }
+
+    if(!this.previous_info_window.isOpen){
+      let location= {lat:event['coords'].lat, lng: event['coords'].lng,infoContent:"test",markerDragable:true}
+      this.store.dispatch(new userProfileActions.InitSaveUserPins(location))
+      }
+    
     
   }
 
-  pinClicked(pin, infoWindow)
+  pinClicked(pin, infoWindow:AgmMarker)
   {
-    console.log(pin)
+    
+    infoWindow.infoWindow.first.isOpen = true
+
     if(this.previous_info_window == null){
       this.previous_info_window = infoWindow.infoWindow.first
+
     }
     else{
     this.previous_info_window.close()
     this.previous_info_window =  infoWindow.infoWindow.first
+  
     }
- 
+
 
       this.city = null;
       this.state = null;
       this.country = null;
       this.getLocationName(pin["lat"],pin["lng"])
   }
+
+  // infoWindowClosed(){
+  //   console.log("closed")
+  //   this.infoWindowOpened = false
+    
+  // }
  
 
 
@@ -195,6 +229,7 @@ export class MyMapComponent implements OnInit, OnDestroy {
   
       let coords = {lat:lat, lng:lng}
       this.store.dispatch(new userProfileActions.SetUserHomeTown(coords))
+
       
   }
 

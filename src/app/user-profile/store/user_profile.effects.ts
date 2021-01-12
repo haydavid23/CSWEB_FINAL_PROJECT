@@ -63,7 +63,7 @@ export class UserProfileEffects {
   
     return this.http.get<my_map_models.pins[] | {[error:string]:string}>("http://127.0.0.1:8000/get_user_pins")
   }),mergeMap((response)=>{
-    console.log("get pins")
+
       if(response["error"])
       {
         return [new userProfileActions.DbGetResponse("fail")]
@@ -71,7 +71,7 @@ export class UserProfileEffects {
       }
       else
       {
-        console.log(response)
+   
         return [new userProfileActions.DbGetResponse("success"),new userProfileActions.SaveUserPins(<my_map_models.pins[]>response)]
         
         

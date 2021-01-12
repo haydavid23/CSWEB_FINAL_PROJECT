@@ -1,6 +1,6 @@
 
 
-<agm-map  [latitude]="initLat" [longitude]="initLng" [zoom]=3 (mapClick)="locationSelected($event)" (mapReady)="mapReady($event)" >
+<agm-map  [latitude]="initLat" [longitude]="initLng" [zoom]=3 (mapClick)="locationSelected($event)" (mapReady)="mapReady($event)"  >
    
 
             
@@ -22,10 +22,11 @@
       height: 60}}:""'
     (markerClick)="pinClicked(pin, $event)" >
 
-    <agm-info-window #infoWindow *ngIf="!pin['hometown']">
+    <agm-info-window #infoWindow *ngIf="!pin['hometown']" >
+    
       <mat-list>
         <mat-list-item>
-          <span>{{fullLocationName}}</span>
+          <span>{{fullLocationName?fullLocationName:'Loading...'}}</span>
           <mat-divider></mat-divider>
         </mat-list-item>
         <mat-list-item>
@@ -47,7 +48,7 @@
 <agm-info-window #hometownInfoWindow  *ngIf="pin['hometown']">
   <mat-list>
     <mat-list-item>
-      {{city + ', ' + state + ', ' + country }}
+      {{fullLocationName?fullLocationName:'Loading...'}}
     </mat-list-item>
     <mat-divider></mat-divider>
  
