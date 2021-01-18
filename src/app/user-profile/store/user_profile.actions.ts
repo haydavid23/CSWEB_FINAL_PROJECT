@@ -16,6 +16,8 @@ export const GET_USER_HOMETOWN= "GET_USER_HOMETOWN";
 export const SAVE_USER_HOMETOWN= "SAVE_USER_HOMETOWN";
 export const DB_RES_USER_HOMETOWN= "DB_RES_USER_HOMETOWN";
 
+export const UPLOAD_PICTURES= "UPLOAD_PICTURES";
+
 
 
 
@@ -98,7 +100,12 @@ export class SaveDbResUserHomeTown implements Action{
     constructor(public payload:string){}
 }
 
+export class UploadPictures implements Action{
+    readonly type = UPLOAD_PICTURES;
+    constructor(public payload:FormData){}
+}
+
 
 export type UserProfileUserActions =  SaveLoggedUser | 
 GetLoggedUser | DeleteUser | SaveUserPins | SetUserHomeTown| GetUserHomeTown | SaveUserHomeTown | SaveDbResUserHomeTown|
- InitSaveUserPins | DbGetResponse |GetUserPins | InitDeletedPin | SavePinResponse
+ InitSaveUserPins | DbGetResponse |GetUserPins | InitDeletedPin | SavePinResponse | UploadPictures

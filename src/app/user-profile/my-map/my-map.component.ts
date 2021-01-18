@@ -8,8 +8,7 @@ import { BehaviorSubject, Subscription } from 'rxjs';
 import { AppService } from 'src/app/app.service';
 import { AgmInfoWindow, AgmMarker} from '@agm/core';
 import { MapsAPILoader } from '@agm/core';
-
-
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 
@@ -47,7 +46,13 @@ export class MyMapComponent implements OnInit, OnDestroy {
 
   pins:Array<models.pins> = [];
 
-  constructor(private store:Store<fromApp.AppState>, private actions$:Actions, private appSrv:AppService, private changeDetector:ChangeDetectorRef, private mapsApiLoader:MapsAPILoader) {
+  constructor(private store:Store<fromApp.AppState>, 
+    private actions$:Actions,
+     private appSrv:AppService, 
+     private changeDetector:ChangeDetectorRef,
+     private router:Router,
+     private route:ActivatedRoute,
+      private mapsApiLoader:MapsAPILoader) {
       this.mapsApiLoader.load().then(()=>{
         this. geoCoder = new google.maps.Geocoder
       })
@@ -55,6 +60,7 @@ export class MyMapComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit() {
+    console.log(this.route)
     
         //listens for db save pin response
         this.saveDBResSub = this.actions$.pipe(
@@ -79,6 +85,7 @@ export class MyMapComponent implements OnInit, OnDestroy {
        
         if(state.locationPins != null)
         {
+          
           this.pins = state.locationPins
           
         }
@@ -163,9 +170,6 @@ export class MyMapComponent implements OnInit, OnDestroy {
           window.alert('No results found');
         }
       } 
-      // else {
-      //   window.alert('Geocoder failed due to: ' + status);
-      // }
     
     });
   }
@@ -180,16 +184,19 @@ export class MyMapComponent implements OnInit, OnDestroy {
   locationSelected(event:MouseEvent)
   { 
     
-    
-    // if(!this.infoWindowOpened){
-    // let location= {lat:event['coords'].lat, lng: event['coords'].lng,infoContent:"test",markerDragable:true}
-    // this.store.dispatch(new userProfileActions.InitSaveUserPins(location))
-    // }
+
+    if(this.previous_info_window){
 
     if(!this.previous_info_window.isOpen){
       let location= {lat:event['coords'].lat, lng: event['coords'].lng,infoContent:"test",markerDragable:true}
       this.store.dispatch(new userProfileActions.InitSaveUserPins(location))
       }
+    }
+    else
+    {
+      let location= {lat:event['coords'].lat, lng: event['coords'].lng,infoContent:"test",markerDragable:true}
+      this.store.dispatch(new userProfileActions.InitSaveUserPins(location))
+    }
     
     
   }
@@ -216,12 +223,7 @@ export class MyMapComponent implements OnInit, OnDestroy {
       this.getLocationName(pin["lat"],pin["lng"])
   }
 
-  // infoWindowClosed(){
-  //   console.log("closed")
-  //   this.infoWindowOpened = false
-    
-  // }
- 
+
 
 
   setHome(lat, lng)
@@ -237,8 +239,12 @@ export class MyMapComponent implements OnInit, OnDestroy {
   { 
   
     this.store.dispatch(new userProfileActions.InitDeletedPin(pin))
-    // info.close()
 
+  }
+
+  navigateToDetails()
+  {
+    this.router.navigate(["../details/france"],{relativeTo:this.route})
   }
 
   mapReady(event)
@@ -253,7 +259,7 @@ export class MyMapComponent implements OnInit, OnDestroy {
       }
     })
       
-
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('countryCount'));
     this.map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('savePins'));
     this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(document.getElementById('travelInfo'));
 

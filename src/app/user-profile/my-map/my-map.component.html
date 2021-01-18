@@ -10,7 +10,6 @@
         </div>
 
 
- 
 
 
 <agm-marker 
@@ -35,7 +34,7 @@
           </button>
         </mat-list-item>
         <mat-list-item>
-          <button mat-button color="primary">See Details</button>
+          <button mat-button color="primary" (click)="navigateToDetails()">See Details</button>
         </mat-list-item>
         <mat-list-item>
           <button mat-button color="primary" type="button" (click)="deletePin(pin, infoWindow)">Delete Pin</button>

@@ -139,6 +139,15 @@ export class UserProfileEffects {
 
 }))
 
+
+
+@Effect({dispatch:false}) uploadPictures= this.actions$.pipe(ofType<userProfileActions.UploadPictures>(userProfileActions.UPLOAD_PICTURES), mergeMap((action:userProfileActions.UploadPictures)=>{
+  console.log(action.payload)
+  return this.http.post("http://127.0.0.1:8000/uploadTripPictures",action.payload).pipe(tap((res)=>{
+    console.log(res)
+  }))
+}))
+
   }
 
 

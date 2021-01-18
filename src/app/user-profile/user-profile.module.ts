@@ -11,13 +11,15 @@ import { MyMapComponent } from './my-map/my-map.component';
 import { MyPlacesComponent } from './my-places/my-places.component';
 import { AgmCoreModule } from '@agm/core';
 import { UserInfoComponent } from './user-info/user-info.component';
+import { CountryDetailComponent } from './country-detail/country-detail.component';
+import { UploadPicturesComponent } from './country-detail/upload-pictures/upload-pictures.component';
 
 
 
 
 
 @NgModule({
-  declarations: [ProfileLayoutComponent, MyMapComponent, MyPlacesComponent, UserInfoComponent],
+  declarations: [ProfileLayoutComponent, MyMapComponent, MyPlacesComponent, UserInfoComponent, CountryDetailComponent, UploadPicturesComponent],
   imports: [
     CommonModule,
     ProfileRoutingRoutingModule,
