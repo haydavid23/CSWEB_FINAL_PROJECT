@@ -13,13 +13,19 @@ import { AgmCoreModule } from '@agm/core';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { CountryDetailComponent } from './country-detail/country-detail.component';
 import { UploadPicturesComponent } from './country-detail/upload-pictures/upload-pictures.component';
+import { UploadPicturesDirective } from './country-detail/upload-pictures/upload-pictures.directive';
 
 
 
 
 
 @NgModule({
-  declarations: [ProfileLayoutComponent, MyMapComponent, MyPlacesComponent, UserInfoComponent, CountryDetailComponent, UploadPicturesComponent],
+  declarations: [ProfileLayoutComponent, 
+    MyMapComponent, MyPlacesComponent, 
+    UserInfoComponent, CountryDetailComponent,
+     UploadPicturesComponent,
+     UploadPicturesDirective
+    ],
   imports: [
     CommonModule,
     ProfileRoutingRoutingModule,

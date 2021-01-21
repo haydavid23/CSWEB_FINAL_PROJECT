@@ -1,5 +1,49 @@
-<div class="form-group">
-  <input type="file" class="form-control-file" id="exampleFormControlFile1" (change)="fileChange($event)" multiple>
-  <button mat-raised-button (click)="beginUpload()">Upload Files</button>
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="dropArea" uploadPictures (picturesDropped)="onFileDropped($event)">
+        <input type="file" #fileDropRef id="fileDropRef" multiple (change)="onFileDropped($event.target.files)" />
+        <i class="fas fa-cloud-upload-alt fs-2x"></i>
+        <h3>Drag and drop file here</h3>
+        <h3>or</h3>
+        <label for="fileDropRef">Browse for file</label>
+    </div>
+    </div>
+  </div>
+
+
+<div class="row" *ngIf="pictures.length > 0">
+  <div class="col-sm-12 d-flex flex-column">
+
+    <div class="files-list" >
+      <div class="single-file" *ngFor="let picture of pictures; let i =index">
+          <i class="far fa-file-pdf fa-2x"></i>
+        <div class="info">
+          <h4 class="name">
+            {{picture?.name}}
+          </h4>
+          <p class="size">
+            {{picture?.size}}
+          </p>   
+        </div>
+        <i class="far fa-trash-alt" (click)="deleteDropPicture(i)"></i>
+   
+      </div>   
+    </div>
+
+    <div class="align-self-end">
+      <button mat-raised-button (click)="beginUpload()">Upload pictures(s)</button>
+    </div>
+   
+  </div>
+
+</div>
 </div>
 
+<!-- <button mat-raised-button (click)="beginUpload()">Upload pictures(s)</button> -->
+
+
+
+    

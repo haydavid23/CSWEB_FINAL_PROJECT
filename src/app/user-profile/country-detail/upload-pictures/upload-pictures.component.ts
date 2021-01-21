@@ -13,24 +13,42 @@ export class UploadPicturesComponent implements OnInit {
 
   constructor(private store:Store<AppState.AppState>) { }
 
-  uploadedFiles:File[]
+
+  pictures:Array<File> = [];
 
   ngOnInit() {
   }
 
   fileChange(file)
   {
-    this.uploadedFiles=file.target.files
+    
   }
 
   beginUpload()
   {
     let formData = new FormData()
 
-    formData.append("files",this.uploadedFiles[0])
+    this.pictures.forEach((picture, index)=>{
+        formData.append(`picture${index}`,picture)
+    })
 
+ 
     this.store.dispatch(new userProfileActions.UploadPictures(formData)) 
     
+  }
+
+  onFileDropped(files:FileList)
+  {
+   
+    this.pictures =  [...this.pictures, ...Array.from(files)]
+    
+  }
+
+  deleteDropPicture(deletedIndex)
+  {
+    this.pictures = this.pictures.filter((file:File, index)=>{
+        return deletedIndex !== index
+    })
   }
 
 }
