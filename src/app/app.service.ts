@@ -2,7 +2,7 @@ import { HttpClient} from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material';
 import { Observable, of } from 'rxjs';
-import { AppDialogMsgComponent } from './shared_components/error-component/app-dialog-msg/app-dialog-msg.component';
+import { AppDialogMsgComponent } from './shared_components/app-dialog-msg/app-dialog-msg.component';
 import {AppErrorMsgComponent} from "./shared_components/error-component/app-error-msg/app-error-msg.component"
 
 @Injectable({

@@ -1,5 +1,6 @@
 import * as UserProfileActions from "../store/user_profile.actions"
 import * as my_map_models from "../my-map/my_map.models"
+import * as user_profile_models from "../user_profile.models"
 
 export interface State
 {
@@ -9,6 +10,7 @@ export interface State
     hometown:my_map_models.UserHometown;
     pinsGetFailed:string;
     hometownGetFailed:string;
+    currentTrip:user_profile_models.Trip
     
 }
 
@@ -18,7 +20,8 @@ const initialState:State = {
     locationPins:null,
     hometown:null,
     pinsGetFailed:null,
-    hometownGetFailed:null
+    hometownGetFailed:null,
+    currentTrip:null
 
 
 }
@@ -41,6 +44,9 @@ export function userProfileReducer(state:State=initialState, action:UserProfileA
 
         case(UserProfileActions.DB_RES_USER_HOMETOWN):
         return {...state, hometownGetFailed:action.payload}
+
+        case(UserProfileActions.SAVE_CURRENT_TRIP):
+        return {...state, currentTrip:action.payload}
 
         case(UserProfileActions.SAVE_USER_HOMETOWN):
         return {...state, hometown:action.payload}

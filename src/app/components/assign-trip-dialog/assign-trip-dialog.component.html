@@ -1,0 +1,47 @@
+
+<form [formGroup]="newTripForm" >
+<div class="container">
+    <div class="row">
+        <div class="col-sm-6">
+            <mat-form-field appearance="standard">
+                <mat-label>Trip Name</mat-label>
+                <input matInput placeholder="Placeholder" formControlName="tripName">
+                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+              </mat-form-field>
+        </div>
+        <div class="col-sm-6">
+            <mat-form-field appearance="standard">
+                <mat-label>Trip Description</mat-label>
+                <input matInput placeholder="Placeholder" formControlName="tripDescription">
+                <mat-icon matSuffix>sentiment_very_satisfied</mat-icon>
+              </mat-form-field>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-6">
+            <mat-form-field appearance="fill">
+                <mat-label>Start Date</mat-label>
+                <input matInput [matDatepicker]="startpicker" formControlName="startDate">
+                <mat-datepicker-toggle matSuffix [for]="startpicker"></mat-datepicker-toggle>
+                <mat-datepicker #startpicker></mat-datepicker>
+              </mat-form-field>
+              
+        </div>
+        <div class="col-sm-6">
+            <mat-form-field appearance="fill">
+                <mat-label>End Date</mat-label>
+                <input matInput [matDatepicker]="endpicker" formControlName="endDate">
+                <mat-datepicker-toggle matSuffix [for]="endpicker"></mat-datepicker-toggle>
+                <mat-datepicker #endpicker></mat-datepicker>
+              </mat-form-field>
+              
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-12 d-flex justify-content-end">
+            <button mat-button color="primary" (click)="createNewTrip()">Create Trip</button>
+        </div>
+    </div>
+</div>
+</form>

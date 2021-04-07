@@ -15,9 +15,10 @@ export const SET_USER_HOMETOWN= "SET_USER_HOMETOWN";
 export const GET_USER_HOMETOWN= "GET_USER_HOMETOWN";
 export const SAVE_USER_HOMETOWN= "SAVE_USER_HOMETOWN";
 export const DB_RES_USER_HOMETOWN= "DB_RES_USER_HOMETOWN";
-
+export const CREATE_NEW_TRIP= "CREATE_NEW_TRIP";
 export const UPLOAD_PICTURES= "UPLOAD_PICTURES";
-
+export const SAVE_CURRENT_TRIP= "SAVE_CURRENT_TRIP";
+export const CREATE_NEW_TRIP_FAIL= "CREATE_NEW_TRIP_FAIL";
 
 
 
@@ -59,6 +60,23 @@ export class GetUserPins implements Action{
    
 }
 
+export class CreateNewTrip implements Action{
+    readonly type = CREATE_NEW_TRIP
+    constructor(public payload:user_profileModel.Trip){}
+   
+}
+
+export class CreateNewTripFail implements Action{
+    readonly type = CREATE_NEW_TRIP_FAIL
+ 
+}
+
+export class SaveCurrentTrip implements Action{
+    readonly type = SAVE_CURRENT_TRIP
+    constructor(public payload:user_profileModel.Trip){}
+   
+}
+
 // export class DeletedPins implements Action{
 //     readonly type = DELETED_PINS;
 //     constructor(public payload:my_map_models.DeletedPin[]){}
@@ -70,7 +88,6 @@ export class InitDeletedPin implements Action{
     constructor(public payload:my_map_models.DeletedPin){}
    
 }
-
 
 
 export class SavePinResponse implements Action{
@@ -108,4 +125,4 @@ export class UploadPictures implements Action{
 
 export type UserProfileUserActions =  SaveLoggedUser | 
 GetLoggedUser | DeleteUser | SaveUserPins | SetUserHomeTown| GetUserHomeTown | SaveUserHomeTown | SaveDbResUserHomeTown|
- InitSaveUserPins | DbGetResponse |GetUserPins | InitDeletedPin | SavePinResponse | UploadPictures
+ InitSaveUserPins | DbGetResponse |GetUserPins | InitDeletedPin | SavePinResponse | UploadPictures | CreateNewTrip | SaveCurrentTrip | CreateNewTripFail

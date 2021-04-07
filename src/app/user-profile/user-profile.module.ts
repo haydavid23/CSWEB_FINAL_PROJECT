@@ -12,8 +12,11 @@ import { MyPlacesComponent } from './my-places/my-places.component';
 import { AgmCoreModule } from '@agm/core';
 import { UserInfoComponent } from './user-info/user-info.component';
 import { CountryDetailComponent } from './country-detail/country-detail.component';
-import { UploadPicturesComponent } from './country-detail/upload-pictures/upload-pictures.component';
-import { UploadPicturesDirective } from './country-detail/upload-pictures/upload-pictures.directive';
+import { UploadPicturesComponent } from '../shared_components/upload-pictures/upload-pictures.component';
+import { UploadPicturesDirective } from '../shared_components/upload-pictures/upload-pictures.directive';
+import { UploadNewPicturesComponent } from './upload-new-pictures/upload-new-pictures.component';
+import { AssignTripDialogBtn, AssignTripDialogComponent } from '../components/assign-trip-dialog/assign-trip-dialog.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -24,7 +27,10 @@ import { UploadPicturesDirective } from './country-detail/upload-pictures/upload
     MyMapComponent, MyPlacesComponent, 
     UserInfoComponent, CountryDetailComponent,
      UploadPicturesComponent,
-     UploadPicturesDirective
+     UploadPicturesDirective,
+     UploadNewPicturesComponent,
+     AssignTripDialogComponent,
+     AssignTripDialogBtn
     ],
   imports: [
     CommonModule,
@@ -36,6 +42,10 @@ import { UploadPicturesDirective } from './country-detail/upload-pictures/upload
   ],
   providers:[
     {provide:HTTP_INTERCEPTORS, useClass:HttpInterceptorService, multi:true}
+  ],
+  entryComponents:[
+    AssignTripDialogBtn,
+    AssignTripDialogComponent
   ]
 })
 export class UserProfileModule { }

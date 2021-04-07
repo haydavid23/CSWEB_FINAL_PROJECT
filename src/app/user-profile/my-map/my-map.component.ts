@@ -29,6 +29,7 @@ export class MyMapComponent implements OnInit, OnDestroy {
   saveDBResSub:Subscription;
   getDBResSub:Subscription;
   hometown:models.UserHometown = null;
+  canSelectPins:boolean = false
 
   city:string;
   state:string;
@@ -60,8 +61,7 @@ export class MyMapComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit() {
-    console.log(this.route)
-    
+
         //listens for db save pin response
         this.saveDBResSub = this.actions$.pipe(
           ofType<userProfileActions.SavePinResponse>(userProfileActions.SAVE_PIN_RESPONSE)).subscribe((action) => {
@@ -82,6 +82,16 @@ export class MyMapComponent implements OnInit, OnDestroy {
     this.storeSub = this.store.select("userProfile").subscribe((state)=>{
       //resets marker opened infowindow
       this.previous_info_window = null
+
+      if(state.currentTrip == null)
+      {
+        
+        this.canSelectPins = false;
+      }
+      else
+      {
+        this.canSelectPins = true;
+      }
        
         if(state.locationPins != null)
         {
@@ -184,7 +194,8 @@ export class MyMapComponent implements OnInit, OnDestroy {
   locationSelected(event:MouseEvent)
   { 
     
-
+    if(this.canSelectPins){
+  
     if(this.previous_info_window){
 
     if(!this.previous_info_window.isOpen){
@@ -197,7 +208,7 @@ export class MyMapComponent implements OnInit, OnDestroy {
       let location= {lat:event['coords'].lat, lng: event['coords'].lng,infoContent:"test",markerDragable:true}
       this.store.dispatch(new userProfileActions.InitSaveUserPins(location))
     }
-    
+  }
     
   }
 
@@ -259,12 +270,14 @@ export class MyMapComponent implements OnInit, OnDestroy {
       }
     })
       
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('newTripBtn'));
     this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('countryCount'));
     this.map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('savePins'));
     this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(document.getElementById('travelInfo'));
 
 
   }
+
 
 
 

@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
 import {AppErrorMsgComponent} from "../shared_components/error-component/app-error-msg/app-error-msg.component"
+import * as userProfileModels from "../user-profile/user_profile.models"
 
 @Injectable({
   providedIn: 'root'
@@ -7,6 +9,8 @@ import {AppErrorMsgComponent} from "../shared_components/error-component/app-err
 export class UserProfileServiceService {
 
   constructor() { }
+
+
 
 
 }

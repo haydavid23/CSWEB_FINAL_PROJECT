@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core"
 import {  Actions, Effect, ofType } from "@ngrx/effects"
-import { filter, mergeMap, withLatestFrom, tap, map, catchError } from "rxjs/operators"
+import { filter, mergeMap, withLatestFrom, tap, map, catchError, switchMap } from "rxjs/operators"
 import { Store } from '@ngrx/store'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { of,  forkJoin} from 'rxjs'
@@ -42,9 +42,10 @@ export class UserProfileEffects {
 
   @Effect() initSaveUserPins= this.actions$.pipe(ofType<userProfileActions.InitSaveUserPins>(userProfileActions.INIT_SAVE_USER_PIN), mergeMap((action:userProfileActions.InitSaveUserPins)=>{
     let locationSelected = action.payload
+    console.log(locationSelected)
     return this.http.post("http://127.0.0.1:8000/save_user_pin",locationSelected)
   }),mergeMap((response:{[msg:string]:string})=>{
-
+    console.log(response)
     if(response["error"])
     {
 
@@ -57,6 +58,27 @@ export class UserProfileEffects {
     }
 
   }))
+
+
+
+  @Effect({dispatch:true}) createNewTrip= this.actions$.pipe(ofType<userProfileActions.CreateNewTrip>(userProfileActions.CREATE_NEW_TRIP), 
+  switchMap((action:userProfileActions.CreateNewTrip)=>{
+
+    return this.http.post("http://127.0.0.1:8000/createNewTrip",{...action.payload}).pipe(map((response:{[msg:string]:string})=>{
+      if(response.msg == "success")
+      {
+        return new userProfileActions.SaveCurrentTrip(action.payload)
+      }
+      else
+      {
+        return new userProfileActions.CreateNewTripFail()
+      }
+  
+    }))
+  }))
+
+
+
 
 
   @Effect() getUserPins= this.actions$.pipe(ofType<userProfileActions.GetUserPins>(userProfileActions.GET_USER_PINS), mergeMap((action:userProfileActions.GetUserPins)=>{
@@ -142,9 +164,31 @@ export class UserProfileEffects {
 
 
 @Effect({dispatch:false}) uploadPictures= this.actions$.pipe(ofType<userProfileActions.UploadPictures>(userProfileActions.UPLOAD_PICTURES), mergeMap((action:userProfileActions.UploadPictures)=>{
-  console.log(action.payload)
-  return this.http.post("http://127.0.0.1:8000/uploadTripPictures",action.payload).pipe(tap((res)=>{
-    console.log(res)
+ 
+  return this.http.post("http://127.0.0.1:8000/uploadTripPictures",action.payload).pipe(catchError((error)=>{
+    this.appSrv.openAppErrorMsg("Server Error. Please Try again")
+    return of(error) 
+  }), filter((error)=>{
+    
+    if(error.error){
+      this.appSrv.openAppErrorMsg(error.error)
+    }
+    
+    return !error.error;
+    
+  }), map((res:{lat:number, lng:number}[])=>{
+    return forkJoin(res.map((newLocation:{lat:number, lng:number})=>{
+      //marks new pins on map
+      this.store.dispatch(new userProfileActions.InitSaveUserPins({...newLocation, hometown:false, infoContent:"test"}))
+     
+    }))
+    
+
+
+  // let arr = Uint8Array.from(atob(res["msg"]), c => c.charCodeAt(0))
+  // let blob = new Blob([arr],{type:"image/jpg"});
+  // window.open(URL.createObjectURL(blob))
+  
   }))
 }))
 
