@@ -1,3 +1,6 @@
+
+import * as mapModels from "../user-profile/my-map/my_map.models"
+
 export interface loggedUser
 {
     firstName:string;
@@ -11,3 +14,4 @@ export interface Trip
     tripStartDate:Date;
     tripEndDate:Date;
 }
+

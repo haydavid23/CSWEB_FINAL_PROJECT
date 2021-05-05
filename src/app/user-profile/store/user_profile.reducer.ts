@@ -10,7 +10,9 @@ export interface State
     hometown:my_map_models.UserHometown;
     pinsGetFailed:string;
     hometownGetFailed:string;
-    currentTrip:user_profile_models.Trip
+    newTrip:user_profile_models.Trip
+    editedTrip:user_profile_models.Trip
+    userTrips:my_map_models.UserTrip
     
 }
 
@@ -21,7 +23,9 @@ const initialState:State = {
     hometown:null,
     pinsGetFailed:null,
     hometownGetFailed:null,
-    currentTrip:null
+    newTrip:null,
+    editedTrip:null,
+    userTrips:null
 
 
 }
@@ -45,11 +49,29 @@ export function userProfileReducer(state:State=initialState, action:UserProfileA
         case(UserProfileActions.DB_RES_USER_HOMETOWN):
         return {...state, hometownGetFailed:action.payload}
 
-        case(UserProfileActions.SAVE_CURRENT_TRIP):
-        return {...state, currentTrip:action.payload}
+        case(UserProfileActions.SAVE_NEW_TRIP):
+        return {...state, newTrip:action.payload}
+
+        case(UserProfileActions.SAVE_EDITED_TRIP):
+        return {...state, editedTrip:action.payload}
 
         case(UserProfileActions.SAVE_USER_HOMETOWN):
         return {...state, hometown:action.payload}
+
+        case(UserProfileActions.SAVE_USER_TRIP):
+        return {...state, userTrips:{...state.userTrips, trips:[...action.payload]}}
+
+        case(UserProfileActions.RESET_EDITED_TRIP):
+        return {...state, editedTrip:null}
+
+        case(UserProfileActions.RESET_NEW_TRIP):
+        return {...state, newTrip:null}
+
+
+        case(UserProfileActions.SAVE_RESPONSE_PINS):
+       
+        return {...state, userTrips:{...state.userTrips, tripPins:action.payload}}
+
 
         default: return state
     }

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
-import { MatAutocompleteModule, MatButtonModule, MatChipsModule, MatDatepicker, MatDatepickerModule, MatDialogModule, MatDividerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatNavList, MatSidenavModule, MatToolbarModule, MatTooltipModule} from '@angular/material';
+import { MatAutocompleteModule, MatButtonModule, MatChipsModule, MatDatepicker, MatDatepickerModule, MatDialogModule, MatDividerModule, MatFormFieldModule, MatIconModule, MatInputModule, MatListModule, MatMenuModule, MatNativeDateModule, MatNavList, MatSelect, MatSelectModule, MatSidenavModule, MatToolbarModule, MatTooltipModule} from '@angular/material';
 import { HttpClientModule } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PageNotFoundComponent } from './shared_components/error-component/page_not_found/page-not-found/page-not-found.component';
@@ -38,7 +38,8 @@ import { AppErrorMsgComponent } from './shared_components/error-component/app-er
     MatAutocompleteModule,
     MatChipsModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSelectModule
   
   ],
   exports:[
@@ -63,7 +64,8 @@ import { AppErrorMsgComponent } from './shared_components/error-component/app-er
     MatAutocompleteModule,
     MatChipsModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatSelectModule
   ],
   entryComponents:[AppErrorMsgComponent]
 })

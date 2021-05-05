@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import * as userProfileActions from "../../user-profile/store/user_profile.actions"
 import { Store } from '@ngrx/store';
 import * as AppState from "../../store/app.reducer"
+import { FormControl, FormGroup } from '@angular/forms';
 
 
 @Component({
@@ -13,10 +14,24 @@ export class UploadPicturesComponent implements OnInit {
 
   constructor(private store:Store<AppState.AppState>) { }
 
+  newTripInfo:FormGroup;
 
   pictures:Array<File> = [];
 
-  ngOnInit() {
+  ngOnInit() 
+  {
+    this.initNewTrip()
+  }
+
+  initNewTrip()
+  {
+    this.newTripInfo= new FormGroup({
+      tripName:new FormControl(null),
+      tripDescription: new FormControl(null),
+      tripStartDate: new FormControl(null),
+      tripEndDate: new FormControl(null)
+
+    })
   }
 
   fileChange(file)
@@ -26,16 +41,19 @@ export class UploadPicturesComponent implements OnInit {
 
   beginUpload()
   {
-    let formData = new FormData()
+    let formData = new FormData();
+    formData.append("formValues", JSON.stringify(this.newTripInfo.value))
 
     this.pictures.forEach((picture, index)=>{
         formData.append(`picture${index}`,picture)
     })
 
+
  
-    this.store.dispatch(new userProfileActions.UploadPictures(formData)) 
+    this.store.dispatch(new userProfileActions.UploadPictures(formData))
     
   }
+  
 
   onFileDropped(files:FileList)
   {

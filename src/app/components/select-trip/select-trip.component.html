@@ -1,0 +1,20 @@
+
+
+<div id="select-trip">
+    <h5 class="text-center">Select Trip</h5>
+<mat-form-field appearance="fill">
+    <mat-label>Select Trip</mat-label>
+    <mat-select (selectionChange)="tripSelected($event)" [(ngModel)]="selectValue">
+        <mat-option value="All">
+            Show All
+          </mat-option>
+      <mat-option *ngFor="let trip of userTrips" [value]="trip.id">
+        {{trip.trip_name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+
+
+

@@ -1,5 +1,5 @@
 import {Component, Inject, OnInit} from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {MatDialog, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
 import * as userProfileActions from "../../user-profile/store/user_profile.actions"
@@ -37,9 +37,9 @@ ngOnInit()
 initForm()
 {
   this.newTripForm = new FormGroup({
-    startDate: new FormControl(),
-    endDate: new FormControl(),
-    tripName: new FormControl(),
+    startDate: new FormControl(null, Validators.required),
+    endDate: new FormControl(null, Validators.required),
+    tripName: new FormControl(null, Validators.required),
     tripDescription: new FormControl()
   })
 }

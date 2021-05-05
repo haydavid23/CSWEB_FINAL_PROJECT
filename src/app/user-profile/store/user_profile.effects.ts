@@ -1,15 +1,20 @@
 import { Injectable } from "@angular/core"
 import {  Actions, Effect, ofType } from "@ngrx/effects"
 import { filter, mergeMap, withLatestFrom, tap, map, catchError, switchMap } from "rxjs/operators"
-import { Store } from '@ngrx/store'
+import { State, Store } from '@ngrx/store'
 import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { of,  forkJoin} from 'rxjs'
-import { Router } from '@angular/router'
+import { of,  forkJoin, iif} from 'rxjs'
+import { ActivatedRoute, Route, Router } from '@angular/router'
 import * as userProfileActions from "../store/user_profile.actions"
 import * as fromApp from "../../store/app.reducer"
 import * as userProfileModels from "../user_profile.models"
 import { AppService } from "src/app/app.service"
 import * as my_map_models from "../my-map/my_map.models"
+import { MatDialog } from "@angular/material"
+import { PinPictureDialogComponent } from "src/app/components/pin-picture-dialog/pin-picture-dialog.component"
+import { DialogLoadingSpinnerComponent } from "src/app/components/dialog-loading-spinner/dialog-loading-spinner.component"
+import { MsgDialogComponent } from "src/app/components/msg-dialog/msg-dialog.component"
+
 
 
 
@@ -24,7 +29,9 @@ export class UserProfileEffects {
     private http:HttpClient,
     private router:Router,
     private store: Store<fromApp.AppState>,
-    private appSrv:AppService
+    private appSrv:AppService,
+    private route:ActivatedRoute,
+    private dialog:MatDialog
   ) { }
 
 
@@ -44,7 +51,7 @@ export class UserProfileEffects {
     let locationSelected = action.payload
     console.log(locationSelected)
     return this.http.post("http://127.0.0.1:8000/save_user_pin",locationSelected)
-  }),mergeMap((response:{[msg:string]:string})=>{
+  }),switchMap((response:{[msg:string]:string})=>{
     console.log(response)
     if(response["error"])
     {
@@ -64,14 +71,15 @@ export class UserProfileEffects {
   @Effect({dispatch:true}) createNewTrip= this.actions$.pipe(ofType<userProfileActions.CreateNewTrip>(userProfileActions.CREATE_NEW_TRIP), 
   switchMap((action:userProfileActions.CreateNewTrip)=>{
 
-    return this.http.post("http://127.0.0.1:8000/createNewTrip",{...action.payload}).pipe(map((response:{[msg:string]:string})=>{
+    return this.http.post("http://127.0.0.1:8000/createNewTrip",{...action.payload}).pipe(switchMap((response:{[msg:string]:string})=>{
+
       if(response.msg == "success")
       {
-        return new userProfileActions.SaveCurrentTrip(action.payload)
+        return [new userProfileActions.SaveNewTrip(action.payload), new userProfileActions.GetUserTrips()]
       }
       else
       {
-        return new userProfileActions.CreateNewTripFail()
+        return [new userProfileActions.CreateNewTripFail()]
       }
   
     }))
@@ -81,10 +89,10 @@ export class UserProfileEffects {
 
 
 
-  @Effect() getUserPins= this.actions$.pipe(ofType<userProfileActions.GetUserPins>(userProfileActions.GET_USER_PINS), mergeMap((action:userProfileActions.GetUserPins)=>{
+  @Effect() getUserPins= this.actions$.pipe(ofType<userProfileActions.GetUserPins>(userProfileActions.GET_USER_PINS), switchMap((action:userProfileActions.GetUserPins)=>{
   
     return this.http.get<my_map_models.pins[] | {[error:string]:string}>("http://127.0.0.1:8000/get_user_pins")
-  }),mergeMap((response)=>{
+  }),switchMap((response)=>{
 
       if(response["error"])
       {
@@ -94,8 +102,8 @@ export class UserProfileEffects {
       else
       {
    
-        return [new userProfileActions.DbGetResponse("success"),new userProfileActions.SaveUserPins(<my_map_models.pins[]>response)]
-        
+        // return [new userProfileActions.DbGetResponse("success"),new userProfileActions.SaveUserPins(<my_map_models.pins[]>response)]
+        return [new userProfileActions.DbGetResponse("success"),new userProfileActions.SaveResponsePins(<my_map_models.Pin[]>response)]
         
       }
   }))
@@ -163,8 +171,8 @@ export class UserProfileEffects {
 
 
 
-@Effect({dispatch:false}) uploadPictures= this.actions$.pipe(ofType<userProfileActions.UploadPictures>(userProfileActions.UPLOAD_PICTURES), mergeMap((action:userProfileActions.UploadPictures)=>{
- 
+@Effect({dispatch:false}) uploadPictures= this.actions$.pipe(ofType<userProfileActions.UploadPictures>(userProfileActions.UPLOAD_PICTURES), switchMap((action:userProfileActions.UploadPictures)=>{
+  this.dialog.open(DialogLoadingSpinnerComponent,{data:{}})
   return this.http.post("http://127.0.0.1:8000/uploadTripPictures",action.payload).pipe(catchError((error)=>{
     this.appSrv.openAppErrorMsg("Server Error. Please Try again")
     return of(error) 
@@ -176,21 +184,134 @@ export class UserProfileEffects {
     
     return !error.error;
     
-  }), map((res:{lat:number, lng:number}[])=>{
-    return forkJoin(res.map((newLocation:{lat:number, lng:number})=>{
-      //marks new pins on map
-      this.store.dispatch(new userProfileActions.InitSaveUserPins({...newLocation, hometown:false, infoContent:"test"}))
-     
-    }))
-    
+  }), tap(()=>{
+    this.dialog.closeAll();
+    this.router.navigate([".."],{relativeTo:this.route});
+  })
 
-
-  // let arr = Uint8Array.from(atob(res["msg"]), c => c.charCodeAt(0))
-  // let blob = new Blob([arr],{type:"image/jpg"});
-  // window.open(URL.createObjectURL(blob))
   
-  }))
+  )
 }))
+
+
+
+
+// @Effect({dispatch:true}) saveTripPin= this.actions$.pipe(ofType<userProfileActions.SaveTripPin>(userProfileActions.SAVE_TRIP_PIN), 
+// withLatestFrom(this.store.select("userProfile")),switchMap(([action, state])=>{
+  
+//   let newPin:my_map_models.pins ={...action.payload, tripName:state.newTrip.tripName}
+//   return this.http.post("http://127.0.0.1:8000/saveTripPin",newPin).pipe(switchMap((response:{[msg:string]:string})=>{
+//     console.log(response)
+//     if(response["error"])
+//     {
+
+//       return [new userProfileActions.SavePinResponse(response["error"])]
+//     }
+//     else
+//     {
+      
+//       // return [new userProfileActions.GetUserPins(),new userProfileActions.SavePinResponse("success"), new userProfileActions.GetUserTrips()]
+//       return [new userProfileActions.SavePinResponse("success"), new userProfileActions.GetUserTrips()]
+//     }
+
+//   })
+//   )
+
+
+// }))
+
+
+
+@Effect({dispatch:true}) saveTripPin= this.actions$.pipe(ofType<userProfileActions.SaveTripPin>(userProfileActions.SAVE_TRIP_PIN), 
+withLatestFrom(this.store.select("userProfile")),switchMap(([action, state])=>{
+  let newPin:my_map_models.pins ={...action.payload, tripName:state.newTrip?state.newTrip.tripName:state.editedTrip.tripName}
+  return iif(()=> state.newTrip !== null,
+  
+  this.http.post("http://127.0.0.1:8000/saveTripPin",newPin).pipe(switchMap((response:{[msg:string]:string})=>{
+      console.log(response)
+      if(response["error"])
+      {
+  
+        return [new userProfileActions.SavePinResponse(response["error"])]
+      }
+      else
+      {
+        return [new userProfileActions.GetUserPins(),new userProfileActions.SavePinResponse("success"), new userProfileActions.GetUserTrips()]
+      }
+  
+    })
+    ),
+    this.http.post("http://127.0.0.1:8000/saveTripPin",newPin).pipe(switchMap((response:{[msg:string]:string})=>{
+      
+      if(response["error"])
+      {
+  
+        return [new userProfileActions.SavePinResponse(response["error"])]
+      }
+      else
+      {
+        console.log("edited trip")
+        return [new userProfileActions.SavePinResponse("success"), new userProfileActions.GetUserTrips(),new userProfileActions.GetUserPins()]
+      }
+  
+    })
+    )
+    
+  )
+  
+}))
+
+
+@Effect({dispatch:true}) getUserTrips= this.actions$.pipe(ofType<userProfileActions.GetUserTrips>(userProfileActions.GET_USER_TRIPS), 
+withLatestFrom(this.store.select("userProfile")),switchMap(([action, state])=>{
+  console.log("userTrips")
+
+  return this.http.get("http://127.0.0.1:8000/getUserTrips").pipe(map((response:my_map_models.Trip[])=>{
+  console.log(response)
+  return new userProfileActions.SaveUserTrips(response)
+}))
+
+
+}))
+
+
+
+
+
+@Effect({dispatch:false}) getPinPicture= this.actions$.pipe(ofType<userProfileActions.GetPinPicture>(userProfileActions.GET_PIN_PICTURE), switchMap((action:userProfileActions.GetPinPicture)=>{
+   this.dialog.open(DialogLoadingSpinnerComponent,{data:{}})
+  return this.http.post("http://127.0.0.1:8000/getPinPicture",action.payload).pipe(catchError((error)=>{
+    return of("Error Getting Picture")
+  }))
+
+}), tap((response)=>{
+
+  if(response !== "Error Getting Picture")
+  {
+    let newArr = Uint8Array.from(atob(response["encodedPic"]), c=>c.charCodeAt(0))
+    let blob:Blob = new Blob([newArr],{type:"image/png"})
+    // let url = window.open(URL.createObjectURL(blob))
+    let url = URL.createObjectURL(blob)
+    this.dialog.closeAll()
+    this.dialog.open(PinPictureDialogComponent,{data:{picture:url}})
+  }
+  else
+  {
+    this.dialog.closeAll()
+    this.dialog.open(MsgDialogComponent,{data:response})
+  }
+
+
+ 
+
+})
+)
+
+
+
+
+
+
 
   }
 

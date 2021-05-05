@@ -17,8 +17,16 @@ export const SAVE_USER_HOMETOWN= "SAVE_USER_HOMETOWN";
 export const DB_RES_USER_HOMETOWN= "DB_RES_USER_HOMETOWN";
 export const CREATE_NEW_TRIP= "CREATE_NEW_TRIP";
 export const UPLOAD_PICTURES= "UPLOAD_PICTURES";
-export const SAVE_CURRENT_TRIP= "SAVE_CURRENT_TRIP";
+export const SAVE_NEW_TRIP= "SAVE_NEW_TRIP";
 export const CREATE_NEW_TRIP_FAIL= "CREATE_NEW_TRIP_FAIL";
+export const RESET_EDITED_TRIP= "RESET_EDITED_TRIP";
+export const SAVE_TRIP_PIN = "SAVE_NEW_TRIP_PIN";
+export const GET_USER_TRIPS = "GET_USER_TRIPS";
+export const SAVE_USER_TRIP = "SAVE_USER_TRIP";
+export const SAVE_RESPONSE_PINS = "SAVE_RESPONSE_PINS";
+export const SAVE_EDITED_TRIP = "SAVE_EDITED_TRIP";
+export const RESET_NEW_TRIP = "RESET_NEW_TRIP";
+export const GET_PIN_PICTURE = "GET_PIN_PICTURE";
 
 
 
@@ -71,8 +79,14 @@ export class CreateNewTripFail implements Action{
  
 }
 
-export class SaveCurrentTrip implements Action{
-    readonly type = SAVE_CURRENT_TRIP
+export class SaveNewTrip implements Action{
+    readonly type = SAVE_NEW_TRIP
+    constructor(public payload:user_profileModel.Trip){}
+   
+}
+
+export class SaveEditedTrip implements Action{
+    readonly type = SAVE_EDITED_TRIP
     constructor(public payload:user_profileModel.Trip){}
    
 }
@@ -122,7 +136,57 @@ export class UploadPictures implements Action{
     constructor(public payload:FormData){}
 }
 
+export class ResetEditedTrip implements Action
+{
+    readonly type = RESET_EDITED_TRIP;
+   
+}
+
+export class ResetNewTrip implements Action
+{
+    readonly type = RESET_NEW_TRIP;
+   
+}
+//testing
+export class SaveTripPin implements Action
+{
+    readonly type = SAVE_TRIP_PIN;
+    constructor(public payload:my_map_models.pins){}
+   
+}
+
+export class SaveUserTrips implements Action
+{
+    readonly type = SAVE_USER_TRIP 
+    constructor(public payload:my_map_models.Trip[]){}
+   
+}
+
+export class GetUserTrips implements Action
+{
+    readonly type =GET_USER_TRIPS;
+}
+
+export class SaveResponsePins implements Action
+{
+    readonly type = SAVE_RESPONSE_PINS;
+    constructor(public payload:my_map_models.Pin[]){}
+}
+
+export class GetPinPicture implements Action
+{
+    readonly type = GET_PIN_PICTURE;
+    constructor(public payload:number){}
+}
+
+
+//
+
+
+
 
 export type UserProfileUserActions =  SaveLoggedUser | 
 GetLoggedUser | DeleteUser | SaveUserPins | SetUserHomeTown| GetUserHomeTown | SaveUserHomeTown | SaveDbResUserHomeTown|
- InitSaveUserPins | DbGetResponse |GetUserPins | InitDeletedPin | SavePinResponse | UploadPictures | CreateNewTrip | SaveCurrentTrip | CreateNewTripFail
+ InitSaveUserPins | DbGetResponse |GetUserPins | InitDeletedPin | SavePinResponse | SaveTripPin | SaveEditedTrip|
+ UploadPictures | CreateNewTrip | SaveNewTrip | CreateNewTripFail | ResetEditedTrip | GetUserTrips | SaveUserTrips | 
+ SaveResponsePins | ResetNewTrip | GetPinPicture

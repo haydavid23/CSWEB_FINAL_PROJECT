@@ -20,7 +20,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class MyMapComponent implements OnInit, OnDestroy {
 
   @ViewChild('infoWindow', {static: false}) infowindow:AgmInfoWindow;
-  map:any
+  map:google.maps.Map
 
   actionSavePinSub:Subscription;
   initLat:number = null;
@@ -41,11 +41,17 @@ export class MyMapComponent implements OnInit, OnDestroy {
 
   infoWindowOpened:boolean = false
   previous_info_window = null
+  tripState:models.UserTrip
 
   private geoCoder;
+  selectShowAll:boolean =false;
+  currentTripSel:number | string = "All";
+  addingPins:boolean = false;
 
 
   pins:Array<models.pins> = [];
+  userTripsPins:models.Pin[];
+  
 
   constructor(private store:Store<fromApp.AppState>, 
     private actions$:Actions,
@@ -61,7 +67,9 @@ export class MyMapComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit() {
-
+    
+    this.store.dispatch(new userProfileActions.GetUserPins())
+    this.store.dispatch(new userProfileActions.GetUserTrips())
         //listens for db save pin response
         this.saveDBResSub = this.actions$.pipe(
           ofType<userProfileActions.SavePinResponse>(userProfileActions.SAVE_PIN_RESPONSE)).subscribe((action) => {
@@ -80,16 +88,53 @@ export class MyMapComponent implements OnInit, OnDestroy {
 
   
     this.storeSub = this.store.select("userProfile").subscribe((state)=>{
+     this.tripState = state.userTrips?state.userTrips:{trips:null, tripPins:[]};
+      
+     if(this.currentTripSel == "All")
+     {
+      this.userTripsPins = state.userTrips?state.userTrips.tripPins:[];
+     }
+     else
+     {
+
+         this.userTripsPins = this.tripState.tripPins.filter((pin)=>{
+  
+          return pin.trip_id == this.currentTripSel
+        })
+
+
+     }
+
+    
       //resets marker opened infowindow
       this.previous_info_window = null
+     
 
-      if(state.currentTrip == null)
+      if(state.newTrip == null)
       {
-        
-        this.canSelectPins = false;
+          if(state.editedTrip && this.addingPins)
+          {
+            this.canSelectPins= true;
+          }
+          // else
+          // {
+  
+            
+          //   this.canSelectPins = false;
+          // }
+
+          
       }
       else
       {
+
+        this.map.controls[google.maps.ControlPosition.TOP_CENTER]['Kb'][0].hidden = true
+        this.map.controls[google.maps.ControlPosition.TOP_LEFT]['Kb'][0].hidden = true
+        let doneBtn:HTMLElement = this.map.controls[google.maps.ControlPosition.TOP_LEFT]['Kb'][1]
+
+        doneBtn.hidden = false;
+        doneBtn.style.left = '0px'
+
         this.canSelectPins = true;
       }
        
@@ -193,22 +238,31 @@ export class MyMapComponent implements OnInit, OnDestroy {
   
   locationSelected(event:MouseEvent)
   { 
-    
+
     if(this.canSelectPins){
   
-    if(this.previous_info_window){
+      if(this.previous_info_window){
 
-    if(!this.previous_info_window.isOpen){
-      let location= {lat:event['coords'].lat, lng: event['coords'].lng,infoContent:"test",markerDragable:true}
-      this.store.dispatch(new userProfileActions.InitSaveUserPins(location))
-      }
+        if(!this.previous_info_window.isOpen){
+          let location= {lat:event['coords'].lat, lng: event['coords'].lng,infoContent:"test",markerDragable:true}
+          // this.store.dispatch(new userProfileActions.InitSaveUserPins(location))
+          this.store.dispatch(new userProfileActions.SaveTripPin(location))
+          }
+        }
+        else
+        {
+          let location= {lat:event['coords'].lat, lng: event['coords'].lng,infoContent:"test",markerDragable:true}
+          // this.store.dispatch(new userProfileActions.InitSaveUserPins(location))
+          this.store.dispatch(new userProfileActions.SaveTripPin(location))
+     
+        }
+
     }
-    else
-    {
-      let location= {lat:event['coords'].lat, lng: event['coords'].lng,infoContent:"test",markerDragable:true}
-      this.store.dispatch(new userProfileActions.InitSaveUserPins(location))
-    }
-  }
+    
+    
+  
+
+  
     
   }
 
@@ -258,11 +312,26 @@ export class MyMapComponent implements OnInit, OnDestroy {
     this.router.navigate(["../details/france"],{relativeTo:this.route})
   }
 
+  tripDone()
+  {
+    this.canSelectPins = false;
+    this.selectShowAll = true;
+    this.addingPins = false;
+    this.store.dispatch(new userProfileActions.ResetNewTrip())
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT]['Kb'][1].hidden = true
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT]['Kb'][0].hidden = false
+    this.map.controls[google.maps.ControlPosition.TOP_CENTER]['Kb'][0].hidden = false
+
+    
+ 
+
+  }
+
   mapReady(event)
   {
     this.map = event
-   
-   
+ 
+
     this.dbResponseErrorErrorSub =this.dbResponseError.subscribe((msg)=>{
       if(msg)
       {
@@ -270,16 +339,76 @@ export class MyMapComponent implements OnInit, OnDestroy {
       }
     })
       
+  
     this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('newTripBtn'));
-    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('countryCount'));
-    this.map.controls[google.maps.ControlPosition.BOTTOM_CENTER].push(document.getElementById('savePins'));
-    this.map.controls[google.maps.ControlPosition.TOP_RIGHT].push(document.getElementById('travelInfo'));
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('tripDoneBtn'));
+    this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(document.getElementById('select-trip'));
 
+
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(document.getElementById('addPins'));
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT]["Kb"][0].hidden = false;
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT]["Kb"][1].hidden = true;
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT]["Kb"][2].hidden = true;
+
+   
+
+   
+  }
+
+  addPins()
+  {
+    this.canSelectPins = true;
+    this.addingPins = true;
+    this.selectShowAll = false;
+
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT]["Kb"][2].hidden = true;
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT]["Kb"][0].hidden = true;
+    this.map.controls[google.maps.ControlPosition.TOP_CENTER]["Kb"][0].hidden = true;
+ 
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT]["Kb"][1].hidden = false;
+    this.map.controls[google.maps.ControlPosition.TOP_LEFT]["Kb"][1].style.left="0px"
+    
 
   }
 
 
+  tripChanged(value:number|string)
+  {
+    // this.canSelectPins = false
+    this.currentTripSel = value
+    
+    
+    if(this.map){
 
+
+    if(this.currentTripSel == "All")
+    {
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT]['Kb'][0].hidden = false;
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT]["Kb"][2].hidden = true;
+      this.userTripsPins = this.tripState.tripPins
+
+      
+    } 
+    else{
+      
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT]['Kb'][0].hidden = true;
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT]["Kb"][2].hidden = false;
+      this.map.controls[google.maps.ControlPosition.TOP_LEFT]["Kb"][2].style.left ="0px"
+      // this.map.controls[google.maps.ControlPosition.TOP_LEFT]["Kb"][2].style.bottom = "0px"
+     
+        let trip= this.tripState.trips.filter((trip)=>{return trip.id == value})[0]
+
+        this.store.dispatch(new userProfileActions.SaveEditedTrip({tripName:trip['trip_name'],tripDescription:null, tripStartDate:null, tripEndDate:null}))
+        this.userTripsPins = this.tripState.tripPins.filter((pin)=>{
+  
+      return pin.trip_id == value
+    })
+
+  }
+    }
+
+    
+  }
 
   ngOnDestroy()
   {

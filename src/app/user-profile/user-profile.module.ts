@@ -17,6 +17,10 @@ import { UploadPicturesDirective } from '../shared_components/upload-pictures/up
 import { UploadNewPicturesComponent } from './upload-new-pictures/upload-new-pictures.component';
 import { AssignTripDialogBtn, AssignTripDialogComponent } from '../components/assign-trip-dialog/assign-trip-dialog.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SelectTripComponent } from '../components/select-trip/select-trip.component';
+import { PinPictureBtnDialog, PinPictureDialogComponent } from '../components/pin-picture-dialog/pin-picture-dialog.component';
+import { DialogLoadingSpinnerComponent } from '../components/dialog-loading-spinner/dialog-loading-spinner.component';
+import { MsgDialogComponent } from '../components/msg-dialog/msg-dialog.component';
 
 
 
@@ -30,7 +34,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
      UploadPicturesDirective,
      UploadNewPicturesComponent,
      AssignTripDialogComponent,
-     AssignTripDialogBtn
+     AssignTripDialogBtn,
+     SelectTripComponent,
+     PinPictureBtnDialog,
+     PinPictureDialogComponent,
+     DialogLoadingSpinnerComponent,
+     MsgDialogComponent
     ],
   imports: [
     CommonModule,
@@ -45,7 +54,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
   ],
   entryComponents:[
     AssignTripDialogBtn,
-    AssignTripDialogComponent
+    AssignTripDialogComponent,
+    PinPictureBtnDialog,
+    PinPictureDialogComponent,
+    DialogLoadingSpinnerComponent,
+    MsgDialogComponent
+
   ]
 })
 export class UserProfileModule { }

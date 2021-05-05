@@ -1,18 +1,52 @@
 
-
-      <mat-card>
-        <div class="container">
+      <mat-card class="text-white">
+        <form [formGroup]="newTripInfo">
+        <div class="container" >
+          <div class="row mb-3">
+            <div class="col-sm-12">
+              <h5 class="text-center">
+                New Trip 
+              </h5>
+            </div>
+          </div>
 
           <div class="row d-flex justify-content-center">
-            <div class="col-sm-8">
-                <mat-form-field class="w-100">
-                    <mat-label>New Trip</mat-label>
-                    <input matInput value="Sushi">
+            <div class="col-sm-6">
+                <mat-form-field class="w-100" appearance="fill">
+                    <mat-label>Trip Name</mat-label>
+                    <input matInput formControlName="tripName">
                   </mat-form-field>
             </div>
-
+            <div class="col-sm-6">
+              <mat-form-field class="w-100" appearance="fill">
+                  <mat-label>Trip Description</mat-label>
+                  <input matInput formControlName="tripDescription">
+                </mat-form-field>
+          </div>
 
         </div>
+
+        <div class="row d-flex justify-content-center">
+          <div class="col-sm-6">
+            <mat-form-field appearance="fill" class="w-100" >
+              <mat-label>Start date</mat-label>
+              <input matInput  [matDatepicker]="Startpicker" formControlName="tripStartDate">
+              <mat-datepicker-toggle matSuffix [for]="Startpicker"></mat-datepicker-toggle>
+              <mat-datepicker #Startpicker ></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div class="col-sm-6">
+            <mat-form-field appearance="fill" class="w-100" >
+              <mat-label>End date</mat-label>
+              <input matInput [matDatepicker]="Endpicker" formControlName="tripEndDate">
+              <mat-datepicker-toggle matSuffix [for]="Endpicker"></mat-datepicker-toggle>
+              <mat-datepicker #Endpicker ></mat-datepicker>
+            </mat-form-field>
+        </div>
+
+      </div>
+
+
           <div class="row">
             <div class="col sm-12">
               <mat-card-header>
@@ -27,7 +61,7 @@
         
             <div class="col-sm-12">
               <div class="dropArea" uploadPictures (picturesDropped)="onFileDropped($event)">
-                <input type="file" #fileDropRef id="fileDropRef" multiple (change)="onFileDropped($event.target.files)" />
+                <input class="drop_file" type="file" #fileDropRef id="fileDropRef" multiple (change)="onFileDropped($event.target.files)" />
                 <i class="fas fa-cloud-upload-alt fs-2x"></i>
                 <h3>Drag and drop file here</h3>
                 <h3>or</h3>
@@ -66,13 +100,32 @@
         </div>
       </mat-card-content>
         </div>
+        </form>
         </mat-card>
         
         
 
 
-  
 
+        <!-- <mat-card>
+          <div class="container">
+            <div class="row">
+              <div class="col-md-6">
+                <mat-form-field class="w-100" appearance="fill">
+                    <mat-label>Trip Name</mat-label>
+                    <input matInput>
+                  </mat-form-field>
+            </div>
+            <div class="col-md-6">
+              <mat-form-field class="w-100" appearance="fill">
+                  <mat-label>Trip Description</mat-label>
+                  <input matInput>
+                </mat-form-field>
+          </div>
+            </div>
+          </div>
+        </mat-card> -->
 
-
+      
     
+

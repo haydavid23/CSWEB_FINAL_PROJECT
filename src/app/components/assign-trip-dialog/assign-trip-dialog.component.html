@@ -40,7 +40,8 @@
 
     <div class="row">
         <div class="col-sm-12 d-flex justify-content-end">
-            <button mat-button color="primary" (click)="createNewTrip()">Create Trip</button>
+            <button mat-button color="primary" [mat-dialog-close]="true" (click)="createNewTrip()" 
+            [disabled]="newTripForm.invalid">Create Trip</button>
         </div>
     </div>
 </div>

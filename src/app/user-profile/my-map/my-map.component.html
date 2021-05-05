@@ -1,7 +1,13 @@
 
-
+    
 <agm-map  [latitude]="initLat" [longitude]="initLng" [zoom]=3 (mapClick)="locationSelected($event)" (mapReady)="mapReady($event)"  >
    
+
+
+    <app-select-trip  [userTrips]="tripState.trips" (trip_selected)="tripChanged($event)" [showAll]="selectShowAll"></app-select-trip>
+
+   
+
 
             
         <div class="alert alert-danger w-50 text-center" role="alert" id="getError">
@@ -9,57 +15,79 @@
             Unable to load pins. Please refresh app</h5>
         </div>
 
-        <app-assign-trip-btn></app-assign-trip-btn>
-       
-
-
-
-
-<agm-marker 
-    *ngFor="let pin of pins;trackBy:trackByLatLng" 
-    [latitude]="pin.lat" 
-    [longitude]="pin.lng" 
-    [iconUrl]='pin.hometown?{url: "../../assets/home-solid.svg", anchor:{x:25,y:40},  scaledSize: {
-      width: 40,
-      height: 60}}:""'
-    (markerClick)="pinClicked(pin, $event)" >
-
-    <agm-info-window #infoWindow *ngIf="!pin['hometown']" >
     
-      <mat-list>
-        <mat-list-item>
-          <span>{{fullLocationName?fullLocationName:'Loading...'}}</span>
-          <mat-divider></mat-divider>
-        </mat-list-item>
-        <mat-list-item>
-          <button mat-button color="primary" (click)="setHome(pin.lat, pin.lng)" type="button">
-            Set as Home <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
-          </button>
-        </mat-list-item>
-        <mat-list-item>
-          <button mat-button color="primary" (click)="navigateToDetails()">See Details</button>
-        </mat-list-item>
-        <mat-list-item>
-          <button mat-button color="primary" type="button" (click)="deletePin(pin, infoWindow)">Delete Pin</button>
-        </mat-list-item>
-        <mat-divider></mat-divider>
-      </mat-list>
-    </agm-info-window>
+       <div>
+        <app-assign-trip-btn ></app-assign-trip-btn> 
+       </div>
+  
+       <div>
+        <div>
+          <button  mat-raised-button color="primary" (click)="tripDone()" id="tripDoneBtn">Done</button>
+    
+         </div>
+    <div>
+      <button  mat-raised-button color="primary" (click)="addPins()" id="addPins">Add Pins</button>
+    
+    </div>   
+    
+    
+    <div>
+      <button  mat-raised-button color="primary" (click)="addPins()" id="addPins">Add Pins</button>
+    </div>
+       </div>
+     
 
-    <!-- hometown info window -->
-<agm-info-window #hometownInfoWindow  *ngIf="pin['hometown']">
-  <mat-list>
-    <mat-list-item>
-      {{fullLocationName?fullLocationName:'Loading...'}}
-    </mat-list-item>
-    <mat-divider></mat-divider>
+
+   
+
+     <agm-marker 
+     *ngFor="let pin of userTripsPins;trackBy:trackByLatLng" 
+     [latitude]="pin.lat" 
+     [longitude]="pin.lng" 
+     [iconUrl]='pin.hometown?{url: "../../assets/home-solid.svg", anchor:{x:25,y:40},  scaledSize: {
+       width: 40,
+       height: 60}}:""'
+     (markerClick)="pinClicked(pin, $event)" >
  
-
-  </mat-list>
-
-</agm-info-window>
-
-</agm-marker>
+     <agm-info-window #infoWindow *ngIf="!pin['hometown']" >
+     
+       <mat-list>
+         <mat-list-item>
+           <span>{{fullLocationName?fullLocationName:'Loading...'}}</span>
+           <mat-divider></mat-divider>
+         </mat-list-item>
+         <mat-list-item>
+           <button mat-button color="primary" (click)="setHome(pin.lat, pin.lng)" type="button">
+             Set as Home <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
+           </button>
+         </mat-list-item>
+         <!-- <mat-list-item>
+           <button mat-button color="primary" (click)="navigateToDetails()">See Details</button>
+         </mat-list-item> -->
+         <mat-list-item>
+          <pinPicBtn [pinId]="pin.id" ></pinPicBtn>
+        </mat-list-item>
+         <mat-list-item>
+           <button mat-button color="primary" type="button" (click)="deletePin(pin, infoWindow)">Delete Pin</button>
+         </mat-list-item>
+         <mat-divider></mat-divider>
+       </mat-list>
+     </agm-info-window>
+ 
+     
+ <agm-info-window #hometownInfoWindow  *ngIf="pin['hometown']">
+   <mat-list>
+     <mat-list-item>
+       {{fullLocationName?fullLocationName:'Loading...'}}
+     </mat-list-item>
+     <mat-divider></mat-divider>
+  
+ 
+   </mat-list>
+ 
+ </agm-info-window>
+ 
+ </agm-marker>
 
 
 </agm-map>
